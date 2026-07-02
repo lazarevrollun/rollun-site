@@ -1,6 +1,6 @@
 ---
 title: "PRD: Сайт Rollun (Next.js + Payload CMS)"
-status: draft
+status: final
 created: 2026-07-02
 updated: 2026-07-02
 ---
