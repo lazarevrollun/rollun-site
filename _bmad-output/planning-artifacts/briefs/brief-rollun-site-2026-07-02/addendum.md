@@ -1,6 +1,6 @@
 ---
 title: "Addendum: Сайт Rollun — детализация для PRD/архитектуры"
-status: draft
+status: final
 created: 2026-07-02
 updated: 2026-07-02
 ---
