@@ -9,20 +9,20 @@
 - **Захардкоженный layout + типизированные слоты:** вёрстка в коде, CMS заполняет только размеченные поля. Снимает три напряжения разом — дизайн 1:1 не ждёт CMS, менеджер не ломает вёрстку, MVP быстрее.
 - **Ревалидация:** правки менеджера появляются на проде через on-demand revalidation / ISR без пересборки.
 - **Изображения:** коллекция `Media` + `next/image` → авто-оптимизация webp и нужные размеры («снимает страх hero на 8 МБ»).
-- **Дизайн-токены (два источника):** desktop — 1:1 из `_ds/rollun-design-system-…/colors_and_type.css`; mobile — из `mobile.css`. Портируются в CSS-переменные / Tailwind theme. Портировать **оба** источника.
-- **Внешние зависимости ассетов (вендорить под self-host, NFR-3):** шрифты — Google Fonts → `next/font`; карта About — `d3@7`, `topojson-client@3`, `us-atlas@3/states-10m.json` (jsDelivr) → в бандл; лого для Marquee брендов — сейчас `google.com/s2/favicons`, реальных лого в бандле нет → заменить на реальные ассеты.
+- **Дизайн-токены (одна DS):** портируются из инлайн-стилей desktop-страниц и `mobile.css` в CSS-переменные / Tailwind theme — Poppins (заголовки) / Roboto / Karla (текст), оранж `#EF7F1A`. Файл `_ds/…/colors_and_type.css` (Archivo, `#EA7B08`) **не подключён ни одной страницей — игнорируется** (решение: канон — прототипы).
+- **Внешние зависимости ассетов (вендорить под self-host, NFR-3):** шрифты Poppins/Roboto/Karla (+ **Caveat** на About) — Google Fonts → `next/font`; карта About — `d3@7`, `topojson-client@3`, `us-atlas@3/states-10m.json` (jsDelivr) → в бандл; прототип About тянет `react`/`react-dom`/`@babel/standalone` (unpkg) — **скаффолдинг прототипа, в Next-сборке не нужен**; лого для Marquee брендов — `google.com/s2/favicons` (в Фазе 1 оставляем как есть).
 
-## B. Две дизайн-системы (развилка «пиксель-в-пиксель»)
+## B. Одна дизайн-система (и осиротевший DS-файл)
 
-Handoff содержит **две разные DS** — это намеренно, обе воспроизводятся как есть:
+Прототипы (desktop и mobile) рендерятся **одной** DS: **Poppins** (заголовки), **Roboto**/**Karla** (текст), оранж **`#EF7F1A`**. Это подтверждено по `<head>` и `:root` всех 6 desktop-страниц + `mobile.css`.
 
-| | Desktop-DS | Mobile-DS |
+| | Реальная DS (прототипы, desktop+mobile) | Осиротевший файл `colors_and_type.css` |
 |---|---|---|
-| Шрифты | Archivo / Hanken Grotesk / Spline Sans Mono | Poppins / Roboto / Karla |
-| Оранж | `#EA7B08` | `#EF7F1A` |
-| Фоны | (desktop) | свои |
+| Шрифты | Poppins / Roboto / Karla | Archivo / Hanken Grotesk / Spline Sans Mono |
+| Оранж | `#EF7F1A` | `#EA7B08` («the wordmark orange») |
+| Статус | **используется** (канон) | **не подключён ни одной страницей — игнорируется** |
 
-Правило: матчим **визуал дизайна** на каждом брейкпоинте, а не DOM прототипа. Mobile-HTML → адаптив-брейкпоинты. Аналогично — адреса воспроизводятся постранично как в дизайне (Contact=Houston TX 77039; Our Shops=Conroe TX), без примирения.
+Правило: матчим **визуал отрисованного прототипа** на каждом брейкпоинте, а не DOM. Desktop и mobile — отдельные HTML-раскладки (одна DS, разная вёрстка), переход на ~768px. Адреса воспроизводятся постранично как в дизайне: **и Contact, и Our Shops визуально показывают Houston TX 77039** (5327 Aldine Mail Route Rd); «Conroe TX» присутствует только в ссылке GET DIRECTIONS на Our Shops (нестыковка дизайна). Contact-табы карты переключают Houston ↔ Sheridan WY (legal).
 
 ## C. Детальная модель данных (ориентир для Фаз 2–4)
 
