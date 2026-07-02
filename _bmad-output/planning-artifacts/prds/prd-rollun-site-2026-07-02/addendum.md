@@ -87,3 +87,12 @@ Handoff: `rollun_handoff/rollun-web-site/project/` (главный экран `A
 
 Бриф: `_bmad-output/planning-artifacts/briefs/brief-rollun-site-2026-07-02/` (brief.md + addendum.md).
 Брейншторм: `_bmad-output/brainstorming/brainstorm-rollun-site-cms-2026-07-02/`.
+
+## I. Известные нестыковки дизайна (по умолчанию воспроизводим как есть; кандидаты на фикс — §8 PRD)
+
+- **Contact — опечатка в стартовом `src` карты:** `53%2F27` (= «53/27») вместо `5327`. На первой загрузке карта ищет неверный адрес; клик по любому табу локации чинит (JS кодирует `data-q` заново). В обоих файлах (desktop + mobile).
+- **Our Shops — адрес vs ссылка карты:** видимый адрес Houston TX 77039, а «GET DIRECTIONS» → `maps?q=Conroe, Texas`.
+- **About Us — mobile ≠ desktop:** на mobile нет контакт-модалки (кнопки ведут на `Contact Mobile.html`); карта «US Presence» на mobile — статический список локаций/чипы, не D3.
+- **Lightbox сертификата (Our Brands)** — есть только в mobile-DOM; на desktop это мёртвый код (нет элемента). Esc-закрытие нигде фактически не подключено (только клик).
+- **Catalog — изображения товаров** в прототипе не рендерятся (плейсхолдеры «Photo N»); массив `imgs` задаёт только число слайдов. Реальные фото подставляются позже.
+- **Home — mobile marketplaces** теряют рейтинги, которые есть на desktop-карточках.
