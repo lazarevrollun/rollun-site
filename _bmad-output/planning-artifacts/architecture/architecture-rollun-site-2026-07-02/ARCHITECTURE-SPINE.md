@@ -91,7 +91,7 @@ graph TD
 
 - **Binds:** вся контент-модель; FR-12, FR-13; SM-C2
 - **Prevents:** одна страница смоделирована гибкими блоками, другая — фикс-полями → инвариант «нельзя сломать дизайн» фрагментируется; разный UX редактирования.
-- **Rule:** один Payload **Global на страницу** (`HomeContent`, `AboutContent`, `CatalogContent`, `BrandsContent`, `ShopsContent`, `ContactContent`) + `SiteSettings` (паспорт) + коллекции (`Products`, `Brands`, `Shops`, `Media`, `Posts`, `Users`). **Нет** абстрактной `Page`, **нет** block/free-form page-builder. Слот = типизированное поле под маркер захардкоженной вёрстки; вёрстка/структура полем контента не бывает.
+- **Rule:** один Payload **Global на страницу** (`HomeContent`, `AboutContent`, `CatalogContent`, `BrandsContent`, `ShopsContent`, `ContactContent`) + `SiteSettings` (паспорт) + коллекции (`Products`, `Brands`, `Shops`, `Media`, `Posts`, `Users`). (`BrandsContent` = страница собственного бренда MOTOTOU; коллекция `Brands` = лого чужих брендов для marquee Catalog — разные сущности.) **Нет** абстрактной `Page`, **нет** block/free-form page-builder. Слот = типизированное поле под маркер захардкоженной вёрстки; вёрстка/структура полем контента не бывает.
 
 ### AD-6 — Граница «код vs контент» фиксирована по 4 уровням текучести `[ADOPTED: addendum C]`
 
