@@ -1,0 +1,69 @@
+---
+title: "Addendum: Сайт Rollun — детализация для PRD/архитектуры"
+status: draft
+created: 2026-07-02
+updated: 2026-07-02
+---
+
+# Addendum — Сайт Rollun
+
+Материал, который избыточен для 1-2-страничного брифа, но нужен downstream (PRD, архитектура, solution design). Источник: сессия брейншторминга `brainstorm-rollun-site-cms-2026-07-02` и handoff-бандл.
+
+## 1. Модель контента (Payload CMS 3.0)
+
+**Globals:**
+- `SiteSettings` — «паспорт компании»: телефон(ы), адреса (Registered Rollun LC — Sheridan WY; Shop & Return Center — Houston TX), email, GitHub/LinkedIn, часы работы (Mon–Fri 09:00–21:00 UTC+2). Тянется во все страницы, шапку, футер, Contact, Our Shops. Правка в одном месте → обновилось везде.
+- По одному Global на каждую страницу: `HomeContent`, `AboutContent`, `CatalogContent`, `BrandsContent`, `ShopsContent`, `ContactContent` — поля ровно под редактируемые слоты страницы (не абстрактная «Page» — нельзя сломать структуру).
+
+**Collections:**
+- `Products` — с полем-швом `sku` / `externalId` уже сейчас (ручной ввод), чтобы будущий автосинк дописывал цену/картинку/наличие поверх без переделки модели. Категории из дизайна: Automotive (масла и жидкости, электрика, шины и диски, АКБ), Health (ортопедия, обезболивание, добавки, energy & focus).
+- `Brands`, `Shops` / `Locations`.
+- `Media` — авто-оптимизация (Payload + `next/image` режут тяжёлые картинки в webp/нужные размеры; снимает страх «hero на 8 МБ»).
+- `Posts` — на будущее.
+- `Users` — встроенный auth Payload; роли `admin` / `manager`, access control по ролям.
+
+## 2. Уровни текучести контента (editable vs гвоздями)
+
+| Уровень | Что | В CMS? |
+|---------|-----|--------|
+| 🔴 Живое | Картинки, товары | Да |
+| 🟡 Правимое | Тексты живых блоков, надписи | Да |
+| 🟢 Паспорт | Тел / адрес / GitHub / LinkedIn / часы | Да (`SiteSettings`) |
+| ⚫ Гвоздями | Вёрстка, структура, юр/статичный текст, микрокопи | Нет — в коде |
+
+Граница текста: живые надписи — через CMS; юр/статичный текст — в коде.
+
+## 3. Дизайн-фиделити (приоритет №1)
+
+- **DS-токены** из `colors_and_type.css` портируются 1:1 в CSS-переменные / Tailwind theme: оранж `#EA7B08`, charcoal, spacing / radii / shadows / easing.
+- **Шрифты:** Archivo, Hanken Grotesk, Spline Sans Mono (Google Fonts, как в DS).
+- **Страницы:** 6 desktop + mobile из `rollun_handoff/rollun-web-site/project/` (Home, About Us, Catalog, Our Shops, Our Brands, Contact). Каждый HTML-прототип пересобирается в React-компоненты пиксель-в-пиксель; mobile-версии HTML → адаптив-брейкпоинты. Матчим визуал, не копируем DOM прототипа.
+- **Правило handoff-бандла:** `About Us.html` — главный экран (пользователь держал его открытым при экспорте); читать целиком и идти по импортам.
+
+## 4. Роадмап по фазам
+
+| Фаза | Содержание |
+|------|-----------|
+| **0** | Скаффолд Next.js + Payload в одном проекте, порт DS-токенов и шрифтов, базовый layout (шапка/футер) |
+| **1** (главная ценность) | Все страницы пиксель-в-пиксель с **захардкоженным** контентом + **рабочая форма Contact** (email). Релизится первым |
+| **2** | `SiteSettings` (паспорт) + Media-коллекция; перевод контактов/ссылок/картинок на CMS-слоты |
+| **3** | `Products` / `Brands` / `Shops`; Catalog и Our Brands из CMS, ручной ввод карточек |
+| **4** (на будущее) | Авто-подтяг товаров по sku-шву из внешнего фида; Posts/новости; интеграция формы с CRM |
+
+> Правка относительно брейншторма: рабочая форма Contact (email-доставка) перенесена в Фазу 1 из-за требования «всё должно работать». В исходном брейншторме форма явно не фазировалась.
+
+## 5. Рассмотренные и отклонённые альтернативы
+
+- **Свободный page-builder в CMS** — отклонён: даёт менеджеру сломать дизайн и противоречит приоритету «1:1». Вместо него — типизированные слоты поверх захардкоженного layout.
+- **Абстрактная модель `Page`** — отклонена в пользу отдельного Global на страницу: проще менеджеру, структуру сломать нельзя.
+- **Headless CMS отдельным сервисом (сетевой хоп)** — отклонён в пользу Payload внутри того же Next.js-процесса (local API, self-host, opensource).
+- **Авто-подтяг товаров сейчас** — отклонён; ручной ввод, но модель готова через `sku`-шов.
+
+## 6. Контактные данные из дизайна (для `SiteSettings` / Contact)
+
+- Registered Rollun LC — 30 N Gould St STE 4370, Sheridan WY 82801 (only for legal purposes; no walk-ins).
+- Shop and return center — 5327 Aldine Mail Route Rd, Houston, TX 77039.
+- Телефоны: (307) 920-0149 (legal), (832) 461-2525 (shop & return center).
+- Email: `llc@rollun.com` (+ `info@rollun.com` в футере).
+- Часы: Mon–Fri 09:00–21:00 UTC+2.
+- Темы формы Contact: Wholesale & distribution, Partnership, Marketplace operations, Returns & support, Other.
