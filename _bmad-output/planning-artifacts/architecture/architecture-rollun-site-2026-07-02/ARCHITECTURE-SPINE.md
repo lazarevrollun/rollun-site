@@ -156,7 +156,7 @@ graph TD
 | Роуты | `app/(site)/` сегменты: `/` (Home), `/about`, `/catalog`, `/brands`, `/shops`, `/contact`. Payload-админка — `/admin`. |
 | Именование | Page-глобалы `<Page>Content` (PascalCase); коллекции — PascalCase множественное (`Products`); островки — под `components/islands/`, суффикс `.client.tsx`; per-page контент-тип `<Page>Content` (TS) — контракт страницы; DS-токены — kebab в `@theme`. |
 | Данные и форматы | id — дефолт Payload; даты — ISO-8601; env-переменные — UPPER_SNAKE; TS-тип контент-объекта на страницу — единственный контракт между RSC, островком и (позже) Payload Global. |
-| Мутация состояния | Контент меняется **только** через Payload-админку → `afterChange`-хук → `revalidatePath`/`Tag`. Лид формы — только через Server Action → CRM (не хранится). Прочей записи с сайта нет. |
+| Мутация состояния | Контент меняется **только** через Payload-админку → `afterChange`-хук → `revalidateTag` (канон-тег на Global; см. AD-10). Лид формы — только через Server Action → CRM (не хранится). Прочей записи с сайта нет. |
 | Ошибки | Форма: при ошибке доставки — понятное сообщение + сохранение введённого для повтора (FR-9). Провал POST в CRM логируется server-side. |
 | Auth | Встроенный auth Payload; роли `admin`/`manager` (матрикс — Deferred). Публичный сайт неаутентифицирован. |
 | Изображения | `next/image` везде; в Фазе 2+ — коллекция `Media` (webp, нужные размеры). Плейсхолдеры «Photo N» в Catalog — до реальных фото. |
