@@ -12,7 +12,7 @@ updated: 2026-07-02
 ## 1. Модель контента (Payload CMS 3.0)
 
 **Globals:**
-- `SiteSettings` — «паспорт компании»: телефон(ы), адреса (Registered Rollun LC — Sheridan WY; Shop & Return Center — Houston TX), email, GitHub/LinkedIn, часы работы (Mon–Fri 09:00–21:00 UTC+2). Тянется во все страницы, шапку, футер, Contact, Our Shops. Правка в одном месте → обновилось везде.
+- `SiteSettings` — «паспорт компании»: телефон(ы), адреса (Registered Rollun LC — Sheridan WY; Shop & Return Center — Houston TX), email, GitHub/LinkedIn, часы работы (Mon–Fri 09:00–21:00 UTC+2). Подтягивается во все страницы, шапку, футер, Contact, Our Shops. Правка в одном месте → обновляется везде.
 - По одному Global на каждую страницу: `HomeContent`, `AboutContent`, `CatalogContent`, `BrandsContent`, `ShopsContent`, `ContactContent` — поля ровно под редактируемые слоты страницы (не абстрактная «Page» — нельзя сломать структуру).
 
 **Collections:**
