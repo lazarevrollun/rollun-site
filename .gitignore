@@ -1,5 +1,6 @@
 .claude
 .agents
+.idea
 .env
 .env.local
 
