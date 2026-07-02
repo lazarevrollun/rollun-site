@@ -262,7 +262,7 @@ rollun-site/
 | NFR-1 Одна DS | `styles/theme.css` | AD-2 |
 | NFR-2 Брейкпоинты / переход на 768px | `shell` + композиции страниц | AD-3 |
 | NFR-3 Внешние ассеты / детерминизм | `next/font` + вендор-либы | AD-11 |
-| NFR-4 Изображения | `Media` + `next/image` | AD-5 |
+| NFR-4 Изображения | `Media` + `next/image` | Conventions: Изображения |
 | NFR-5 Ревалидация контента | `afterChange`-хуки Payload | AD-10 |
 
 ## Deferred
