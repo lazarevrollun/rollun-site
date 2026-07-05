@@ -63,7 +63,7 @@ development_status:
   2-1-contactform-component-validation: done
   2-2-crm-submit-server-action-states: done
   2-3-anti-spam-protection: done
-  2-4-three-form-display-modes: backlog
+  2-4-three-form-display-modes: done
   epic-2-retrospective: optional
 
   # Epic 3: Главная страница (Home)

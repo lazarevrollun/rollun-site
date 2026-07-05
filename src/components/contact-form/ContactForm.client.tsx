@@ -24,8 +24,14 @@
  * form-level `role="alert"` message and PRESERVE every entered value (topic
  * included) so the user can retry without re-typing.
  *
- * The two-column info panel, modal and deep-link `?topic=` are OUT of scope here
- * (Story 2.4) — this island renders inline only.
+ * Story 2.4 adds ONE additive seam: an optional `deepLink` prop. When a wrapper
+ * (`ContactInline` reading `?topic=`, or a modal trigger) passes `{ topic }`, a
+ * one-shot effect (ref-guarded) normalizes the text, matches it against
+ * `content.topics`, preselects the topic, briefly pulses the select
+ * (`.cf-prefilled`), smooth-scrolls the form into view and autofocuses the name
+ * field — ported from the prototype (Contact.html:625-644). WITHOUT `deepLink`
+ * the behaviour is byte-identical to Story 2.3 (the effect returns early). The
+ * two-column info panel and the modal chrome live in sibling wrappers, not here.
  */
 import { useEffect, useRef, useState } from 'react'
 
@@ -48,6 +54,12 @@ type ContactFormProps = {
   action?: (values: ContactFormValues) => Promise<ContactFormResult>
   /** Fires after a successful submit resets the form (Story 2.4 modal auto-close). */
   onSuccess?: () => void
+  /**
+   * Deep-link seam (Story 2.4). When present with a `topic`, the topic is matched
+   * against `content.topics` and preselected on mount (see the one-shot effect).
+   * Absent → the form behaves exactly as Story 2.3.
+   */
+  deepLink?: { topic?: string }
 }
 
 /** All fields start empty — keeps the controlled inputs in sync with the values. */
@@ -90,6 +102,7 @@ export default function ContactForm({
   content = contactFormContent,
   action = submitContactForm,
   onSuccess,
+  deepLink,
 }: ContactFormProps) {
   const [values, setValues] = useState<ContactFormValues>(() => makeInitialValues(content.fields))
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -98,6 +111,12 @@ export default function ContactForm({
   const [submitError, setSubmitError] = useState('')
   // DOM handles for focusing the first invalid field (not tied to render).
   const fieldRefs = useRef<Record<string, HTMLElement | null>>({})
+  // Form element handle — the deep-link effect scrolls it into view.
+  const formRef = useRef<HTMLFormElement | null>(null)
+  // "Apply the deep-link exactly once" guard (Story 2.4). `deepLink` arrives
+  // undefined on the first render (ContactInline sets it in a mount effect), so
+  // this survives the undefined→{topic} transition and still fires only once.
+  const deepLinkApplied = useRef(false)
   // Post-success reset timer — held so the useEffect cleanup can clear it and we
   // never call setState after unmount (leak / warning).
   const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -111,6 +130,60 @@ export default function ContactForm({
       if (resetTimer.current) clearTimeout(resetTimer.current)
     }
   }, [])
+
+  // Deep-link `?topic=` (Story 2.4), ported from Contact.html:625-644. Runs once
+  // (ref guard): normalize the wanted text the same way the prototype does, match
+  // it against the topic OPTIONS, and if it hits — preselect the topic, then in a
+  // rAF: smooth-scroll the form into view (~110px offset), pulse the select
+  // (`.cf-prefilled`, removed after ~2400ms) and autofocus the name field (~700ms).
+  // The topic is set here (not in initial state) so the select is empty on the
+  // server and in the first client render — no hydration mismatch. A miss is a
+  // silent no-op; without `deepLink` the effect returns before touching anything.
+  useEffect(() => {
+    if (deepLinkApplied.current) return
+    const wanted = deepLink?.topic
+    if (!wanted) return
+    deepLinkApplied.current = true
+
+    const norm = (s: string) =>
+      s.replace(/[&–—]/g, '').replace(/\s+/g, ' ').trim().toLowerCase()
+    const match = content.topics.find(
+      (topic) => !topic.disabled && norm(topic.label) === norm(wanted),
+    )
+    if (!match) return
+
+    // Set the topic AFTER mount (not in initial state) so the select is empty on the
+    // server and in the first client render — no hydration mismatch. Runs once (ref guard).
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional post-mount deep-link apply (see above)
+    setValues((prev) => ({ ...prev, topic: match.value }))
+
+    const form = formRef.current
+    const select = fieldRefs.current.topic
+    // Hold the rAF + timeout handles so the cleanup cancels anything still
+    // pending if the form unmounts first (e.g. the modal is closed right after a
+    // deep-linked open) — no stray smooth-scroll / focus on a detached node.
+    const timers: ReturnType<typeof setTimeout>[] = []
+    const raf = requestAnimationFrame(() => {
+      if (form) {
+        const top = form.getBoundingClientRect().top + window.scrollY - 110
+        window.scrollTo({ top, behavior: 'smooth' })
+      }
+      if (select) {
+        select.classList.add('cf-prefilled')
+        timers.push(setTimeout(() => select.classList.remove('cf-prefilled'), 2400))
+      }
+      timers.push(setTimeout(() => fieldRefs.current.name?.focus({ preventScroll: true }), 700))
+    })
+    return () => {
+      cancelAnimationFrame(raf)
+      timers.forEach(clearTimeout)
+      // Also drop the pulse class: if cleanup runs after the class was added but
+      // before its removal timer fires (e.g. the modal is closed within ~2.4s of a
+      // deep-linked open), clearing the timer alone would strand the static orange
+      // border/glow permanently on the still-mounted select.
+      select?.classList.remove('cf-prefilled')
+    }
+  }, [deepLink, content.topics])
 
   function handleChange(name: keyof ContactFormValues) {
     return (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -187,7 +260,7 @@ export default function ContactForm({
   const rows = toRows(content.fields)
 
   return (
-    <form id="contactForm" className="cf-form" noValidate onSubmit={handleSubmit}>
+    <form id="contactForm" className="cf-form" noValidate ref={formRef} onSubmit={handleSubmit}>
       <h3>{content.heading}</h3>
 
       {rows.map((row, i) => (
