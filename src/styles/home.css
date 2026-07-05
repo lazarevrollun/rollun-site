@@ -857,6 +857,25 @@
       background-position: center;
       filter: grayscale(1) brightness(0.4) contrast(1.05);
     }
+    /* Bloom overlay driven by HeroMosaic.client (Story 3.2), ported from
+       `Home Mobile.html` — a single reused colour tile that snaps onto a grid
+       cell then expands to the full grid. A background-image div (NOT an <img>,
+       unlike the prototype) so the hidden desktop composition never fetches the
+       mobile hero set; the island creates/populates it only when mobile is
+       active. Decorative → aria-hidden, out of the a11y tree. */
+    .home-mb .mosaic-feature {
+      position: absolute;
+      inset: 0;
+      border-radius: 8px;
+      overflow: hidden;
+      opacity: 0;
+      z-index: 6;
+      pointer-events: none;
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 34px 70px -22px rgba(0, 0, 0, 0.85);
+      will-change: transform, opacity;
+    }
 
     .home-mb .hero-tag {
       display: inline-flex;
@@ -1228,6 +1247,24 @@
     .home-mb .cta-social a:focus-visible {
       outline: 2px solid var(--color-or);
       outline-offset: 3px;
+    }
+  }
+
+  /* Reduced-motion — belt-and-suspenders with HeroMosaic.client, which already
+     starts NO timers when `prefers-reduced-motion: reduce`. This drops the
+     desktop tile bloom transition (the SSR `.lit` subset snaps to its final
+     frame with no fade) and pins the mobile feature statically expanded on the
+     first photo (full grid, opaque, no transform). Scoped outside the 768px
+     width queries so it applies to whichever composition the width `@media`
+     shows. */
+  @media (prefers-reduced-motion: reduce) {
+    .home-dk .mosaic-tile {
+      transition: none;
+    }
+    .home-mb .mosaic-feature {
+      opacity: 1;
+      transform: none;
+      transition: none;
     }
   }
 }

@@ -17,6 +17,8 @@ import Link from 'next/link'
 
 import type { HomeContent, HomeHeadlineSegment, HomeMosaicPhoto } from '@/content/home'
 
+import HeroMosaic from './HeroMosaic.client'
+
 /** Fixed lit subset for the desktop static frame (~25% of 8 tiles, per the
  *  prototype's `round(total * 0.25)` = 2). */
 const LIT_DESKTOP = [2, 5]
@@ -54,6 +56,10 @@ function MosaicTile({ photo, lit }: { photo: HomeMosaicPhoto; lit?: boolean }) {
 export default function Hero({ hero }: { hero: HomeContent['hero'] }) {
   return (
     <>
+      {/* Story 3.2 bloom island — enhances the static frame below in place
+          (renders null; all DOM work in useEffect). It receives the photo sets
+          as props but never rewrites this markup. */}
+      <HeroMosaic mosaicDesktop={hero.mosaicDesktop} mosaicMobile={hero.mosaicMobile} />
       {/* ── Desktop composition (visible ≥768px via home.css) ── */}
       <section className="home-dk hero">
         <div className="container hero-inner">
