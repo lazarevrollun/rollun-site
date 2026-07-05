@@ -1,5 +1,5 @@
 ---
-stepsCompleted: [step-01-validate-prerequisites]
+stepsCompleted: [step-01-validate-prerequisites, step-02-design-epics]
 inputDocuments:
   - _bmad-output/planning-artifacts/prds/prd-rollun-site-2026-07-02/prd.md
   - _bmad-output/planning-artifacts/architecture/architecture-rollun-site-2026-07-02/ARCHITECTURE-SPINE.md
