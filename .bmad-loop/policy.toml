@@ -20,7 +20,7 @@ cache_read_weight = 0.1      # cache reads bill at ~0.1x input on all vendors; 1
 commands = []                # e.g. ["pytest -q", "ruff check ."]
 
 [notify]
-desktop = true               # notify-send, best-effort
+desktop = false              # no popup notifications (headless)
 file = true                  # ATTENTION file in the run dir
 
 [review]
