@@ -1,0 +1,43 @@
+{
+  "name": "rollun-site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "devsafe": "rm -rf .next && next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "generate:types": "payload generate:types",
+    "generate:importmap": "payload generate:importmap",
+    "migrate": "payload migrate",
+    "migrate:create": "payload migrate:create",
+    "payload": "payload"
+  },
+  "dependencies": {
+    "@payloadcms/db-postgres": "3.85.2",
+    "@payloadcms/next": "3.85.2",
+    "@payloadcms/richtext-lexical": "3.85.2",
+    "graphql": "^16.8.1",
+    "next": "16.2.10",
+    "payload": "3.85.2",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@tailwindcss/postcss": "^4.3.2",
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "eslint": "^9.39.0",
+    "eslint-config-next": "16.2.10",
+    "sass": "^1.83.0",
+    "tailwindcss": "^4.3.2",
+    "typescript": "^5.9.3"
+  }
+}

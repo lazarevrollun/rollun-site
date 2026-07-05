@@ -1,0 +1,24 @@
+node_modules
+.next
+build
+npm-debug.log*
+.git
+.gitignore
+.env
+.env.local
+.env.example
+Dockerfile
+.dockerignore
+docker-compose.yml
+*.tsbuildinfo
+next-env.d.ts
+# Repo-adjacent, non-app assets — never copy into the build (AD-11)
+rollun_handoff
+_bmad
+_bmad-output
+.bmad-loop
+.claude
+.idea
+Taskfile.yml
+.mcp.json
+README.md

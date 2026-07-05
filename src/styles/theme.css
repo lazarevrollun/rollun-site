@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+/*
+ * Design-system token source (Tailwind v4, CSS-first) — AD-2.
+ * Intentionally EMPTY in Story 1.1. Story 1.2 populates the palette,
+ * type scale, spacing (4px base), radii, shadows and motion tokens here.
+ */
+@theme {
+}

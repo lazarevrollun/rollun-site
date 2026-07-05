@@ -4,6 +4,16 @@
 .env
 .env.local
 
+# Node / Next.js build artifacts
+node_modules/
+.next/
+/build
+out/
+*.tsbuildinfo
+next-env.d.ts
+npm-debug.log*
+.DS_Store
+
 # Large binary archives (exceed GitHub 100MB limit) — keep out of git
 *.zip
 .bmad-loop/runs/

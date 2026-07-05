@@ -1,0 +1,65 @@
+# Local single-process build/start for Story 1.1 (prod deploy pipeline deferred).
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: rollun
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d rollun"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # One-shot: applies committed Payload migrations, then exits. NODE_ENV=production
+  # in the app means schema is never auto-pushed, so this must run first.
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: migrator
+      args:
+        PAYLOAD_SECRET: ${PAYLOAD_SECRET:-local-dev-secret-change-me}
+        DATABASE_URI: postgres://postgres:postgres@postgres:5432/rollun
+    restart: "no"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URI: postgres://postgres:postgres@postgres:5432/rollun
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET:-local-dev-secret-change-me}
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Payload config loads during build and fails fast if these are unset.
+        # DATABASE_URI is only validated (not connected) at build time.
+        PAYLOAD_SECRET: ${PAYLOAD_SECRET:-local-dev-secret-change-me}
+        DATABASE_URI: postgres://postgres:postgres@postgres:5432/rollun
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      HOSTNAME: 0.0.0.0
+      DATABASE_URI: postgres://postgres:postgres@postgres:5432/rollun
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET:-local-dev-secret-change-me}
+      CRM_API_URL: ${CRM_API_URL:-https://crm.example.com/api}
+      REVALIDATION_SECRET: ${REVALIDATION_SECRET:-local-revalidation-secret}
+    ports:
+      - "3000:3000"
+
+volumes:
+  pgdata:
