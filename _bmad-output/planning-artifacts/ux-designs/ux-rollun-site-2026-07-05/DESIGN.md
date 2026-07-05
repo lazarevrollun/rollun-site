@@ -31,6 +31,7 @@ colors:
   # --- Пер-страничные (варьируются намеренно, AD-13) ---
   moto-navy: '#1c2c6b'      # --moto-navy · ТОЛЬКО Our Brands (бренд Mototou)
   moto-navy-deep: '#14215a' # --moto-navy-deep · ТОЛЬКО Our Brands
+  map-land: '#2a2d2e'       # --map-land · заливка «суши» на карте — ТОЛЬКО About Us
   # --- Внешние / соц ---
   linkedin: '#0a66c2'    # LinkedIn (hover #0954a0)
   github: '#1c1c1c'      # GitHub-кнопка (hover #000)
