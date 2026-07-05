@@ -62,14 +62,28 @@ export type TopicOption = {
 export type ContactFormContent = {
   heading: string
   submitLabel: string
+  /** Success-state button label (prototype `THANK YOU ✓`, Contact.html:620). */
+  successLabel: string
   fields: ContactField[]
   topics: TopicOption[]
   errorMessages: {
     required: string
     email: string
     topic: string
+    /** Delivery failure (non-2xx / network / missing env) — form-level alert. */
+    submit: string
   }
 }
+
+/**
+ * The fixed result contract of the CRM Server Action (Story 2.2, AD-8). This is
+ * the ONE success/error shape every display mode of Story 2.4 consumes — modes
+ * differ only in presentation, never in the send path. It lives HERE (a content
+ * module) and not in `submit.ts` because a `'use server'` file may only export
+ * async functions, so the type has to be imported by both the action and the
+ * client island from this shared home.
+ */
+export type ContactFormResult = { ok: true } | { ok: false; message: string }
 
 /**
  * The single content instance (default prop of `ContactForm`). Fields are listed
@@ -79,6 +93,7 @@ export type ContactFormContent = {
 export const contactFormContent: ContactFormContent = {
   heading: 'Send us a message',
   submitLabel: 'ASK A QUESTION',
+  successLabel: 'THANK YOU ✓',
   fields: [
     { label: 'Your Name', name: 'name', id: 'cf-name', control: 'input', type: 'text', autoComplete: 'name', required: true },
     { label: 'Your Email', name: 'email', id: 'cf-email', control: 'input', type: 'email', autoComplete: 'email', required: true },
@@ -99,5 +114,6 @@ export const contactFormContent: ContactFormContent = {
     required: 'This field is required',
     email: 'Enter a valid email address',
     topic: 'Please select a topic',
+    submit: 'Something went wrong. Please try again.',
   },
 }
