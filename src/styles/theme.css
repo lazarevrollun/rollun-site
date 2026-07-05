@@ -1,9 +1,158 @@
 @import "tailwindcss";
 
 /*
- * Design-system token source (Tailwind v4, CSS-first) — AD-2.
- * Intentionally EMPTY in Story 1.1. Story 1.2 populates the palette,
- * type scale, spacing (4px base), radii, shadows and motion tokens here.
+ * Design-system token source — the SINGLE `@theme` block (Tailwind v4, CSS-first, AD-2).
+ *
+ * Values are ported VERBATIM from the prototype `:root` blocks
+ * (rollun_handoff/rollun-web-site/project/*.html + mobile.css) and DESIGN.md UX-DR1.
+ * Where a prototype literal conflicts with a normalized token, the literal wins (AD-13 > AD-2).
+ *
+ * Tailwind v4 namespaces are used so BOTH utilities and `var(--*)` are generated:
+ *   --color-*  --font-*  --text-*  --radius-*  --shadow-*  --ease-*  --spacing-*
+ *
+ * Surface-specific values (mobile `--shell-w`/`--bg`, About `--map-land`, Brands `--moto-navy`)
+ * are NOT new names — they are scoped overrides of the SAME token names, re-set inside a
+ * composition/page scope. The pattern is documented at the bottom of this file (AD-2).
+ *
+ * Font tokens reference the next/font family CSS variables declared in src/lib/fonts.ts.
  */
 @theme {
+  /* ── Palette (global :root, every page) ───────────────────────────── */
+  --color-or: #EF7F1A;            /* canonical orange — the ONLY orange */
+  --color-or-deep: #C56712;
+  --color-or-soft: #f5a35a;
+  --color-ink: #1f1f1f;
+  --color-ink-soft: #555;
+  --color-ink-mute: #777;
+  --color-bg: #D2D2D2;
+  --color-bg-2: #C9C9C9;
+  --color-paper: #E2E2E2;
+  --color-dark: #1a1a1a;
+  --color-dark-2: #232323;
+  --color-line: rgba(31, 31, 31, 0.12);
+  --color-line-dark: rgba(255, 255, 255, 0.12);
+  --color-green: #2f6b48;
+  --color-green-deep: #214d33; /* Home/About/Contact/Catalog scopes */
+  --color-white: #fff;
+
+  /* Per-surface tokens (default values; scope-overridden per page — see bottom). */
+  --color-moto-navy: #1c2c6b;         /* Our Brands */
+  --color-moto-navy-deep: #14215a;    /* Our Brands */
+  --color-map-land: #2a2d2e;          /* About map */
+  --color-map-border: rgba(255, 255, 255, 0.10); /* About map */
+
+  /* ── Fonts (self-host via next/font; reference family vars from fonts.ts) ── */
+  /* --font-sans rebinds Tailwind's document-default typeface to Roboto (prototype
+     body face); without this, un-classed text falls back to ui-sans-serif. */
+  --font-sans: var(--font-body);
+  --font-display: var(--font-poppins), "Poppins", "Karla", sans-serif;
+  --font-body: var(--font-roboto), var(--font-karla), "Roboto", "Karla", system-ui, sans-serif;
+  --font-hand: var(--font-caveat), "Caveat", cursive; /* About only */
+  --font-mono: var(--font-roboto-mono), "Roboto Mono", ui-monospace, monospace;
+
+  /* ── Type scale (role → size / line-height / letter-spacing / weight) ──
+     Poppins headings base: weight 700, ls -0.005em, lh 1.1. text-transform is
+     applied per component (not encodable in --text-*). */
+  --text-display-hero: clamp(40px, 5.4vw, 78px);
+  --text-display-hero--line-height: 1.05;
+  --text-display-hero--letter-spacing: -0.012em;
+  --text-display-hero--font-weight: 700;
+
+  --text-section-display: clamp(36px, 4.4vw, 64px);
+  --text-section-display--line-height: 1.05;
+  --text-section-display--letter-spacing: -0.005em;
+  --text-section-display--font-weight: 700;
+
+  --text-section-title: clamp(26px, 2.6vw, 36px);
+  --text-section-title--line-height: 1.1;
+  --text-section-title--letter-spacing: 0.02em;
+  --text-section-title--font-weight: 600;
+
+  --text-eyebrow: 11px;
+  --text-eyebrow--line-height: 1.2;
+  --text-eyebrow--letter-spacing: 0.22em;
+  --text-eyebrow--font-weight: 600;
+
+  --text-nav: 14px;
+  --text-nav--letter-spacing: 0.04em;
+  --text-nav--font-weight: 500;
+
+  --text-body-lg: clamp(16px, 1.2vw, 19px);
+  --text-body-lg--line-height: 1.55;
+  --text-body-lg--font-weight: 300;
+
+  --text-body: 15px;
+  --text-body--line-height: 1.6;
+  --text-body--font-weight: 400;
+
+  --text-base: 16px;
+  --text-base--line-height: 1.65;
+
+  --text-label: 14px;
+  --text-label--line-height: 1.3;
+  --text-label--font-weight: 500;
+
+  --text-label-caps: 11px;
+  --text-label-caps--letter-spacing: 0.12em;
+  --text-label-caps--font-weight: 600;
+
+  --text-mono: 13px;
+  --text-mono--font-weight: 400;
+
+  --text-accent-hand: 1.32em; /* Caveat, About only */
+  --text-accent-hand--font-weight: 700;
+
+  /* ── Spacing (4px base — Tailwind default --spacing = 0.25rem = 4px) ──
+     Named layout tokens. Other values are 4px multiples (used per-page later). */
+  --spacing-container: 1280px;   /* container max-width */
+  --spacing-gutter: 28px;        /* desktop gutter */
+  --spacing-gutter-mobile: 20px; /* mobile gutter */
+  --spacing-shell-w: 440px;      /* mobile letterbox shell */
+
+  /* ── Radii ladder (none → full). Buttons use `0`. ─────────────────── */
+  --radius-none: 0;
+  --radius-xs: 3px;
+  --radius-sm: 4px;
+  --radius: 6px;      /* DEFAULT */
+  --radius-md: 9px;
+  --radius-md-2: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 18px;
+  --radius-2xl: 22px;
+  --radius-2xl-lg: 28px; /* cards */
+  --radius-pill: 100px;
+  --radius-full: 9999px;
+
+  /* ── Shadows (named) ──────────────────────────────────────────────── */
+  --shadow-header: 0 4px 20px rgba(0, 0, 0, 0.35);
+  --shadow-input-focus: 0 0 0 3px rgba(239, 127, 26, 0.15);
+  --shadow-card-hover: 0 28px 56px -32px rgba(0, 0, 0, 0.45);
+  --shadow-modal: 0 50px 120px -30px rgba(0, 0, 0, 0.7);
+  --shadow-selected-inset: 0 0 0 2px var(--color-or-soft) inset,
+    0 26px 50px -28px rgba(239, 127, 26, 0.5);
+
+  /* ── Motion — durations + easings ─────────────────────────────────── */
+  --duration-fast: 0.2s;
+  --duration-quick: 0.25s;
+  --duration-snappy: 0.28s;
+  --duration-smooth: 0.34s;
+  --duration-medium: 0.35s;
+  --duration-slow: 0.42s;
+  --duration-slowest: 0.8s;
+
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-modal: cubic-bezier(0.2, 0.8, 0.2, 1);   /* modal-enter */
+  --ease-transform: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
+
+/*
+ * ── Surface-scoped token overrides (AD-2 convention) ───────────────────
+ * Surface-specific values are the SAME token names re-declared inside a scope,
+ * NOT new tokens. Everything inside the scope (utilities + var()) resolves to the
+ * overridden value with no JS/media gating. Examples (the real compositions in
+ * stories 1.3–1.6 attach these scopes; no page content is built here):
+ *
+ *   .mobile-shell        { --spacing-shell-w: 440px; --color-bg: #D2D2D2; }
+ *   [data-surface=brands]{ --color-moto-navy: #1c2c6b; --color-moto-navy-deep: #14215a; }
+ *   [data-surface=about] .map { --color-map-land: #2a2d2e; --color-map-border: rgba(255,255,255,0.10); }
+ */

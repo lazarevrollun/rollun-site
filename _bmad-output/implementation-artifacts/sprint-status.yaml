@@ -51,7 +51,7 @@ development_status:
   # Epic 1: Фундамент и глобальная оболочка
   epic-1: in-progress
   1-1-project-scaffold-single-process-deploy: done
-  1-2-design-system-tokens-fonts-buttons: backlog
+  1-2-design-system-tokens-fonts-buttons: done
   1-3-header-desktop-mobile: backlog
   1-4-footer-desktop-columns-mobile-accordions: backlog
   1-5-mobile-chassis-drawer-scroll-lock-reveal: backlog
