@@ -54,14 +54,18 @@ cleanup_session_on_finish = true  # kill the run's tmux session when it finishes
 # switches client falls back to that profile's defaults instead (model and
 # extra_args are client-specific). Stage tables must come after the [adapter]
 # keys above.
-# [adapter.dev]
-# model = "opus"
-# [adapter.review]
+[adapter.dev]
+model = "opus"               # код пишет Opus (умнее)
+
+[adapter.review]
+model = "sonnet"             # ревью делает Sonnet — независимое второе мнение, дешевле/быстрее
+# Хочешь настоящее кросс-модельное ревью другим CLI — раскомментируй (нужен codex + `bmad-loop init --cli codex`):
 # name = "codex"
 # model = "gpt-5-codex"
-# stop_without_result_nudges = 5     # e.g. a multi-turn review needs more nudges than dev
+# stop_without_result_nudges = 5     # многоходовому ревью нужно больше nudge, чем dev
+
 # [adapter.triage]
-# model = "opus"
+# model = "opus"             # модель для триажа deferred-work sweep
 
 [sweep]
 # Deferred-work sweep: triage + execute open deferred-work.md entries.
