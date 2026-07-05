@@ -126,7 +126,7 @@ Responsive web, **две отдельные композиции** на стра
 
 - **Семантический HTML** и корректный порядок Tab = порядок чтения на каждой поверхности.
 - **Клавиатурная навигация:** все интерактивные элементы достижимы и активируются с клавиатуры; product card — `role=button`/`tabindex=0`/Enter+Space.
-- **Видимые focus-состояния** — оранжевый фокус-ринг `{colors.focus-ring}` (`{colors.or}` = `#EF7F1A`) на всех фокусируемых элементах.
+- **Видимые focus-состояния** — оранжевый фокус-ринг `{colors.or}` (= `#EF7F1A`), `outline:2px solid {colors.or}` + `outline-offset:3px` на всех фокусируемых элементах.
 - **alt-тексты** на смысловых изображениях; декоративные — пустой `alt`.
 - **ARIA на оверлеях:** модалки и quick-view — `role=dialog` + `aria-modal=true` + **focus-trap** + Esc-закрытие; drawer — `aria-expanded` на burger; кнопки-иконки — `aria-label` (`Close`, `Previous image`, `Next image`).
 - **`prefers-reduced-motion`** отключает hero-bloom, count-up (сразу финал), marquee (без авто-скролла), coin-tower/workforce, logo-fly.
