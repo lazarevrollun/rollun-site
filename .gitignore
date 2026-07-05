@@ -6,3 +6,5 @@
 
 # Large binary archives (exceed GitHub 100MB limit) — keep out of git
 *.zip
+.bmad-loop/runs/
+.bmad-loop/cache/
