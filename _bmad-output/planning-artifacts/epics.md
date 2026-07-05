@@ -96,8 +96,62 @@ UX-DR24: **Known Design Defects — воспроизвести дословно 
 
 ### FR Coverage Map
 
-{{requirements_coverage_map}}
+- **FR-1** (Единый адаптивный layout) → **Epic 1** — shell (header/footer/drawer) на всех 6 страницах.
+- **FR-2** (Home) → **Epic 3** — главная пиксель-в-пиксель + анимации.
+- **FR-3** (About Us) → **Epic 4** — About + D3-карта + Automation.
+- **FR-4** (Catalog по линиям + marquee) → **Epic 5** — каркас, карточки, marquee, фильтр линий.
+- **FR-5** (Quick-view + офферы) → **Epic 5** — quick-view + buildOffers.
+- **FR-6** (Витрина MOTOTOU) → **Epic 6** — Our Brands.
+- **FR-7** (Our Shops) → **Epic 6** — Our Shops.
+- **FR-8** (Contact: инлайн-форма/карта/табы) → **Epic 6** — Contact-страница (форма из Epic 2).
+- **FR-9** (Отправка заявки в CRM) → **Epic 2** — Server Action → CRM.
+- **FR-10** (Анти-спам) → **Epic 2** — honeypot + серверная валидация.
+- **FR-11** (Единый компонент формы, 3 режима) → **Epic 2** — ContactForm + режимы показа.
+- **FR-12** (Паспорт из одного места) → **Epic 7** — `SiteSettings`. *(Фаза 2)*
+- **FR-13** (Правка контента без разработчика) → **Epic 7** — Page Globals + слоты + ревалидация. *(Фаза 2–3)*
+
+*Все 13 FR покрыты. NFR-1/2/3 → Epic 1; NFR-4/5 → Epic 7. Cross-cutting UX-DR (a11y-пол UX-DR22, reduced-motion, empty-states UX-DR21, дефекты дизайна UX-DR24) заходят в AC соответствующих историй тех страниц/компонентов, где проявляются.*
 
 ## Epic List
 
-{{epics_list}}
+### Epic 1: Фундамент и глобальная оболочка
+Разработчик получает рабочий каркас проекта (Next.js 16 + Payload в одном процессе) с единой дизайн-системой, а посетитель на **любой** из 6 страниц видит консистентную фирменную шапку, футер и мобильную навигацию, пиксель-в-пиксель по Handoff. Реализует FR-1.
+**FRs covered:** FR-1
+**NFR/Additional:** NFR-1 (одна DS), NFR-2 (брейкпоинты/768px), NFR-3 (вендоринг шрифтов/либ), AD-1/2/3/12 (Islands, `@theme`, две композиции, один процесс), UX-DR1–6.
+*Enables:* всё остальное. Standalone: полностью рабочая оболочка + каркас.
+
+### Epic 2: Contact-форма и захват лида
+B2B-партнёр может оставить заявку, и она гарантированно доходит в CRM Rollun — единственная функция сверх визуала в Фазе 1. Один компонент формы, готовый к монтированию на страницах в трёх режимах показа. Реализует UJ-1 (климакс), SM-2.
+**FRs covered:** FR-9, FR-10, FR-11
+**Additional:** AD-8 (единый ContactForm → Server Action → CRM), UX-DR20 (состояния формы), UX-DR23 (микрокопи/темы/подписи).
+*Enables:* монтирование формы на Home/About/Contact. Standalone: рабочий сквозной путь «форма → CRM».
+
+### Epic 3: Главная страница (Home)
+Оптовый партнёр открывает главную и за секунды считывает, что Rollun — живая технологичная компания: hero-мозаика оживает, счётчики «Proven at scale» досчитывают, продуктовые линии листаются, кнопка «GET IN TOUCH» открывает форму (из Epic 2). Реализует FR-2, UJ-1 (вход).
+**FRs covered:** FR-2
+**Additional:** AD-7 (страница = чистая функция контент-объекта), AD-13 (дефекты as-is), UX-DR11 (product-line switch), UX-DR18 (count-up), UX-DR19 (hero-bloom), UX-DR24#5 (Home mobile без рейтингов).
+*Standalone:* Home пиксель-в-пиксель desktop+mobile с анимациями.
+
+### Epic 4: О компании (About Us)
+Партнёр получает доказательства масштаба: интерактивная D3-карта присутствия по США, count-up-счётчики, секция Automation (coin-tower + workforce), KeepToShip. Реализует FR-3, UJ-1 (доверие).
+**FRs covered:** FR-3
+**Additional:** AD-1 (островки), AD-13 (mobile без D3/модалки), UX-DR13 (US Presence map), UX-DR14 (coin-tower+workforce), UX-DR18 (count-up), UX-DR24#6 (`.team-tile` `#ea7b07` as-is).
+*Standalone:* About пиксель-в-пиксель desktop+mobile.
+
+### Epic 5: Каталог (Catalog)
+Посетитель просматривает продуктовые линии, листает фото товаров, открывает quick-view и уходит на маркетплейс по офферу; внизу — marquee знакомых брендов. Самая интерактивная страница. Реализует FR-4, FR-5, UJ-2.
+**FRs covered:** FR-4, FR-5
+**Additional:** AD-9 (офферы — рантайм-деривация, sku/externalId reserved), AD-13, UX-DR7 (product card+slider), UX-DR8 (quick-view), UX-DR9 (offer row), UX-DR10 (brand marquee), UX-DR12 (category filter).
+*Standalone:* Catalog пиксель-в-пиксель desktop+mobile со всей интерактивностью.
+
+### Epic 6: Бренд, магазины и контакты (Our Brands / Our Shops / Contact)
+Три оставшиеся страницы: витрина собственного бренда MOTOTOU (с сертификатом USPTO на mobile), физический магазин Houston TX с маркетплейс-карточками, и Contact с инлайн-формой (из Epic 2), картой и табами локаций. Реализует FR-6, FR-7, FR-8.
+**FRs covered:** FR-6, FR-7, FR-8
+**Additional:** AD-13/AD-14 (дефекты и атомы паспорта as-is), UX-DR15 (map tabs), UX-DR16 (cert lightbox mobile-only), UX-DR21 (empty-states), UX-DR24#1–#4 (Conroe, `53%2F27`, часы-атомы, USPTO lightbox).
+*Standalone:* 3 страницы пиксель-в-пиксель desktop+mobile.
+
+### Epic 7: CMS — паспорт компании и управляемый контент (Фаза 2–3)
+Нетехнический менеджер меняет паспорт компании, картинки, тексты и товары через админку Payload без разработчика и без риска сломать вёрстку; изменения появляются на проде без пересборки. Реализует FR-12, FR-13, UJ-3, SM-3.
+**FRs covered:** FR-12, FR-13
+**NFR/Additional:** NFR-4 (Media/next-image), NFR-5 (ревалидация), AD-5/6/7 (Global на страницу, слоты, шов роадмапа), AD-10 (revalidateTag/afterChange), AD-14 (атомы паспорта).
+*Standalone:* полный CMS-контур Фаз 2–3. *(Фаза 4 — авто-подтяг товаров из фида и Posts — вынесена за пределы этой разбивки как отдельный будущий эпик.)*
