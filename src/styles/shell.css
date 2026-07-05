@@ -174,3 +174,231 @@
     }
   }
 }
+
+/*
+ * Site Footer (Story 1.4). Same two-composition discipline as the header —
+ * desktop (`.site-footer--dk`) and mobile (`.site-footer--mb`) both SSR-rendered
+ * into one DOM by Footer.tsx; the visible one is switched ONLY by the CSS
+ * `@media` at 768px below (desktop ≥768, mobile <768, exact complement). NO JS
+ * width-gating (AD-3 / NFR-2). Distinct modifier classes keep the identical
+ * `.site-footer` / `.facc` names from the two prototype files from colliding
+ * with each other OR with the header.
+ *
+ * Rules ported VERBATIM from the Handoff (AD-13 > AD-2):
+ *   desktop → Home.html:772-826,1279-1324
+ *   mobile  → Home Mobile.html / mobile.css:126-141 (toggle logic: mobile.js:19-22)
+ * Where a value exists as a DS token it is written through the token
+ * (`--color-or` orange, `--font-display` Poppins); footer-only literals with no
+ * token (#0e0e0e bg, all rgba(255,255,255,…), 13/13.5/12.5px, .18em/.14em,
+ * brightness(1.2), max-height:420px, .28s/.32s) stay verbatim.
+ */
+@layer components {
+  /* Both compositions hidden by default; the media queries below reveal the
+     one that matches the viewport — the only switch, pure CSS. */
+  .site-footer--dk,
+  .site-footer--mb {
+    display: none;
+  }
+
+  /* ─────────────────────────  DESKTOP (≥768px)  ───────────────────────── */
+  @media (min-width: 768px) {
+    .site-footer--dk {
+      display: block;
+      background: #0e0e0e; /* footer bg literal — ≠ header #141414 ≠ --color-dark (AD-13) */
+      color: #fff;
+      padding: 80px 0 30px;
+    }
+    .site-footer--dk .container {
+      max-width: var(--spacing-container);
+      margin: 0 auto;
+      padding: 0 var(--spacing-gutter);
+    }
+    .site-footer--dk .footer-grid {
+      display: grid;
+      grid-template-columns: 3fr 2fr 2fr 3fr 2fr;
+      gap: 40px;
+      margin-bottom: 60px;
+    }
+    .site-footer--dk .logo {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      line-height: 0;
+    }
+    .site-footer--dk .logo img {
+      height: 28px;
+      width: auto;
+      display: block;
+      filter: brightness(1.2);
+    }
+    .site-footer--dk h4 {
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin: 22px 0;
+    }
+    .site-footer--dk ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .site-footer--dk a {
+      color: rgba(255, 255, 255, 0.72);
+      text-decoration: none;
+    }
+    .site-footer--dk a:hover {
+      color: var(--color-or);
+    }
+    /* Keyboard focus ring (DS convention, Story 1.2); invisible at rest → no
+       pixel impact (AD-13). */
+    .site-footer--dk a:focus-visible {
+      outline: 2px solid var(--color-or);
+      outline-offset: 3px;
+    }
+    .site-footer--dk .col p {
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 13.5px;
+    }
+    .site-footer--dk .col .sublabel {
+      color: #fff;
+      font-weight: 500;
+      margin: 12px 0 4px;
+      font-size: 13px;
+    }
+    .site-footer--dk .footer-bottom {
+      text-align: center;
+      padding-top: 28px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+  }
+
+  /* Desktop internal breakpoint (real in the 768–1100px band; --dk is
+     display:none <768, so this only affects the visible desktop range). */
+  @media (max-width: 1100px) {
+    .site-footer--dk .footer-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* ────────────────────  MOBILE (<768px, exact complement of desktop)  ────
+     `not all and (min-width:768px)` is the precise inverse of the desktop
+     query → exactly one composition visible at EVERY width (no fractional gap). */
+  @media not all and (min-width: 768px) {
+    .site-footer--mb {
+      display: block;
+      background: #0e0e0e; /* footer bg literal (AD-13) */
+      color: #fff;
+      padding: 44px 20px calc(30px + env(safe-area-inset-bottom));
+    }
+    .site-footer--mb .logo {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+      line-height: 0;
+    }
+    .site-footer--mb .logo img {
+      height: 26px;
+      width: auto;
+      display: block;
+      filter: brightness(1.2);
+    }
+    .site-footer--mb .intro {
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 13.5px;
+      margin: 18px 0 8px;
+    }
+    .site-footer--mb .facc {
+      border-top: 1px solid rgba(255, 255, 255, 0.09);
+    }
+    .site-footer--mb .facc:last-of-type {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+    }
+    .site-footer--mb .facc-head {
+      width: 100%;
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .site-footer--mb .facc-head svg {
+      width: 18px;
+      height: 18px;
+      color: var(--color-or);
+      transition: transform 0.28s ease;
+    }
+    .site-footer--mb .facc.open .facc-head svg {
+      transform: rotate(45deg);
+    }
+    /* Keyboard focus ring on the accordion header (DS convention, Story 1.2). */
+    .site-footer--mb .facc-head:focus-visible {
+      outline: 2px solid var(--color-or);
+      outline-offset: 3px;
+    }
+    .site-footer--mb .facc-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.32s ease;
+    }
+    .site-footer--mb .facc.open .facc-body {
+      max-height: 420px;
+    }
+    .site-footer--mb .facc-inner {
+      padding: 2px 0 18px;
+    }
+    .site-footer--mb .facc ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .site-footer--mb .facc a {
+      color: rgba(255, 255, 255, 0.72);
+      text-decoration: none;
+    }
+    .site-footer--mb .facc a:hover {
+      color: var(--color-or);
+    }
+    .site-footer--mb .facc a:focus-visible {
+      outline: 2px solid var(--color-or);
+      outline-offset: 3px;
+    }
+    .site-footer--mb .facc p {
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.62);
+      font-size: 13.5px;
+    }
+    .site-footer--mb .facc .sublabel {
+      color: #fff;
+      font-weight: 500;
+      margin: 12px 0 3px;
+      font-size: 12.5px;
+    }
+    .site-footer--mb .footer-bottom {
+      text-align: center;
+      padding-top: 26px;
+      font-size: 12.5px;
+      color: rgba(255, 255, 255, 0.5); /* mobile: no border-top (verbatim) */
+    }
+  }
+}

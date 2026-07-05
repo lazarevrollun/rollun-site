@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 
+import Footer from '@/components/shell/Footer'
 import Header from '@/components/shell/Header.client'
 import { fontVariables } from '@/lib/fonts'
 
@@ -26,6 +27,7 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
       <body>
         <Header />
         {children}
+        <Footer />
       </body>
     </html>
   )
