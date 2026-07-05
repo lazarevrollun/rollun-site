@@ -402,3 +402,206 @@
     }
   }
 }
+
+/*
+ * Mobile drawer + scrim + burger→cross animation (Story 1.5). Same two-part
+ * discipline as header/footer: base `display:none`, full styling only in the
+ * `<768px` complement media (drawer/scrim are mobile-only — the burger that
+ * opens them is itself hidden ≥768). All visuals are toggled by the single
+ * `body.menu-open` class that Header.client.tsx sets from `menuOpen`.
+ *
+ * Ported VERBATIM from the Handoff (AD-13 > AD-2): mobile.css:55-86. The
+ * prototype's `#scrim`/`.drawer` become OUR `.site-scrim`/`.site-drawer` (state
+ * is React, no global DOM ids). Where a value exists as a DS token it is written
+ * through the token (`--spacing-shell-w`, `--color-or`, `--font-display`);
+ * literals with no token (#161616, all rgba(…), min(82%,360px), .34s cubic
+ * curve) stay verbatim.
+ */
+@layer components {
+  /* Burger→cross: the span gained a transition here (it had none in 1.3), then
+     `body.menu-open` rotates lines 1/3 into an × and fades line 2 (mobile.css:55-58). */
+  .site-header--mb .burger span {
+    transition: transform 0.3s ease, opacity 0.2s ease;
+  }
+  body.menu-open .site-header--mb .burger span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  body.menu-open .site-header--mb .burger span:nth-child(2) {
+    opacity: 0;
+  }
+  body.menu-open .site-header--mb .burger span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* Scrim + drawer hidden by default; the complement media below gives them the
+     full mobile styling — the only switch, pure CSS (drawer is unreachable ≥768). */
+  .site-scrim,
+  .site-drawer {
+    display: none;
+  }
+
+  /* ────────────────────  MOBILE (<768px, exact complement of desktop)  ──── */
+  @media not all and (min-width: 768px) {
+    .site-scrim {
+      position: fixed;
+      inset: 0;
+      z-index: 70;
+      background: rgba(0, 0, 0, 0.55); /* verbatim literal (AD-13) */
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    body.menu-open .site-scrim {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .site-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 80;
+      transform: translateX(100%);
+      width: min(82%, 360px); /* verbatim literal (AD-13) */
+      height: 100%;
+      background: #161616; /* drawer bg literal — no token (AD-13) */
+      transition: transform 0.34s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      padding: 26px 26px calc(26px + env(safe-area-inset-bottom));
+    }
+    /* ≥480px: align the drawer's right edge to the 440px shell, not the viewport. */
+    @media (min-width: 480px) {
+      .site-drawer {
+        right: calc(50% - var(--spacing-shell-w) / 2);
+      }
+    }
+    body.menu-open .site-drawer {
+      transform: translateX(0);
+    }
+
+    .site-drawer .drawer-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+    .site-drawer .drawer-top img {
+      height: 28px;
+    }
+    .drawer-close {
+      width: 40px;
+      height: 40px;
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .drawer-close svg {
+      width: 22px;
+      height: 22px;
+    }
+    /* Keyboard focus ring (DS convention, Story 1.2); invisible at rest → no
+       pixel impact (AD-13). */
+    .drawer-close:focus-visible {
+      outline: 2px solid var(--color-or);
+      outline-offset: 3px;
+    }
+
+    .site-drawer nav {
+      display: flex;
+      flex-direction: column;
+    }
+    .site-drawer nav a {
+      color: #fff;
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 17px;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      padding: 17px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: color 0.2s;
+    }
+    .site-drawer nav a svg {
+      width: 17px;
+      height: 17px;
+      color: var(--color-or);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .site-drawer nav a:hover,
+    .site-drawer nav a.active {
+      color: var(--color-or);
+    }
+    .site-drawer nav a.active svg {
+      opacity: 1;
+    }
+    .site-drawer nav a:focus-visible {
+      outline: 2px solid var(--color-or);
+      outline-offset: 3px;
+    }
+
+    .drawer-foot {
+      margin-top: auto;
+    }
+    .drawer-foot .btn {
+      width: 100%;
+      justify-content: center;
+    }
+    .drawer-foot p {
+      color: rgba(255, 255, 255, 0.45);
+      font-family: var(--font-display);
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      margin-top: 18px;
+      text-align: center;
+    }
+  }
+}
+
+/*
+ * Reveal-on-scroll chassis (Story 1.5). Global (not scoped to header/footer) —
+ * any `.reveal` on any of the 6 routes fades/rises in when the shared
+ * RevealOnScroll island adds `.in`. Ported VERBATIM from the Handoff (AD-13):
+ * desktop translateY(36px)/.8s (Home.html:808-809), mobile translateY(26px)/.7s
+ * (mobile.css:144-145). `prefers-reduced-motion` shows everything instantly.
+ */
+@layer components {
+  @media (min-width: 768px) {
+    .reveal {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.in {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @media not all and (min-width: 768px) {
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.in {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+}
