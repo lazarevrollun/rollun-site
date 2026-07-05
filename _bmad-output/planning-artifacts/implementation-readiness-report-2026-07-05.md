@@ -223,3 +223,17 @@ PRD зрелый и внутренне связный: сквозная нуме
 ---
 
 *Assessment by: Implementation Readiness (BMAD) · Assessor role: Product Manager (requirements traceability) · Date: 2026-07-05*
+
+---
+
+## Remediation Applied (2026-07-05)
+
+По итогам оценки внесены правки в артефакты:
+
+1. **[Major #1 — закрыт]** Добавлена **Story 1.6 «Критерий пиксель-приёмки (SM-1)»** в Epic 1 (`epics.md`): брейкпоинт-чеклист на каждую из 6 страниц + канонический Handoff-референс + preview/staging-окружение; приёмка страниц Epic 3–6 ссылается на этот чеклист. Полный visual-diff CI оставлен опциональным/отложенным. Обновлены заголовок Epic 1 и FR Coverage Map (SM-1 → Epic 1).
+2. **[UX Minor #1 — закрыт]** Выровнен **NFR-2 в PRD** (`prd.md`): «до 1100» → «вплоть до 1280» с постраничными наборами и ссылкой на AD-3 / UX EXPERIENCE.md.
+3. **[Epic Minor #1 — закрыт]** **Epic 7 расщеплён** на **Epic 7 (Фаза 2** — паспорт/медиа/текстовые слоты/ревалидация, Stories 7.1–7.4) и **Epic 8 (Фаза 3** — Products/Brands/Shops + роли, Story 8.1). Обновлены Epic List, детальные секции, FR Coverage Map. Итого: **8 эпиков / 28 историй**.
+
+**Остаётся на владельце (не блокирует старт Фазы 1):**
+- UX Minor #3 — явное «ок» на a11y-floor сверх PRD-скоупа.
+- Deferred-вопросы к релизу: контракт CRM API, captcha, DB-адаптер (Postgres), домен/хостинг go-live, реальные лого брендов, конкретное staging-окружение под Story 1.6.

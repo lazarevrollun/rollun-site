@@ -1,0 +1,112 @@
+# generated: 2026-07-05 12:50:54
+# last_updated: 2026-07-05 12:50:54
+# project: rollun-site
+# project_key: NOKEY
+# tracking_system: file-system
+# story_location: {project-root}/_bmad-output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog → in-progress: Automatically when first story is created (via create-story)
+#   - in-progress → done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# Action Item Status:
+#   - open: Committed during a retrospective, not yet addressed
+#   - in-progress: Actively being worked on
+#   - done: Completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - Developer typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+# - Retrospective appends its action items to action_items; sprint-status surfaces open ones
+
+generated: 2026-07-05 12:50:54
+last_updated: 2026-07-05 12:50:54
+project: rollun-site
+project_key: NOKEY
+tracking_system: file-system
+story_location: "{project-root}/_bmad-output/implementation-artifacts"
+
+development_status:
+  # Epic 1: Фундамент и глобальная оболочка
+  epic-1: backlog
+  1-1-project-scaffold-single-process-deploy: backlog
+  1-2-design-system-tokens-fonts-buttons: backlog
+  1-3-header-desktop-mobile: backlog
+  1-4-footer-desktop-columns-mobile-accordions: backlog
+  1-5-mobile-chassis-drawer-scroll-lock-reveal: backlog
+  1-6-pixel-acceptance-breakpoint-checklist-preview: backlog
+  epic-1-retrospective: optional
+
+  # Epic 2: Contact-форма и захват лида
+  epic-2: backlog
+  2-1-contactform-component-validation: backlog
+  2-2-crm-submit-server-action-states: backlog
+  2-3-anti-spam-protection: backlog
+  2-4-three-form-display-modes: backlog
+  epic-2-retrospective: optional
+
+  # Epic 3: Главная страница (Home)
+  epic-3: backlog
+  3-1-home-scaffold-composition-static-content: backlog
+  3-2-hero-mosaic-bloom-animation: backlog
+  3-3-product-line-switcher: backlog
+  3-4-proven-at-scale-counters-marketplace-cards: backlog
+  epic-3-retrospective: optional
+
+  # Epic 4: О компании (About Us)
+  epic-4: backlog
+  4-1-about-scaffold-composition-sections: backlog
+  4-2-us-presence-d3-map-desktop: backlog
+  4-3-us-presence-static-list-mobile: backlog
+  4-4-automation-coin-tower-workforce: backlog
+  epic-4-retrospective: optional
+
+  # Epic 5: Каталог (Catalog)
+  epic-5: backlog
+  5-1-catalog-scaffold-lines-switching: backlog
+  5-2-product-card-image-slider: backlog
+  5-3-offers-runtime-buildoffers: backlog
+  5-4-product-quick-view: backlog
+  5-5-brand-marquee: backlog
+  epic-5-retrospective: optional
+
+  # Epic 6: Бренд, магазины и контакты (Our Brands / Our Shops / Contact)
+  epic-6: backlog
+  6-1-our-brands-mototou-showcase: backlog
+  6-2-our-shops-store-marketplaces: backlog
+  6-3-contact-inline-form-map-location-tabs: backlog
+  epic-6-retrospective: optional
+
+  # Epic 7: CMS — паспорт компании и управляемый контент страниц (Фаза 2)
+  epic-7: backlog
+  7-1-company-passport-sitesettings: backlog
+  7-2-media-collection-image-optimization: backlog
+  7-3-managed-page-content-globals: backlog
+  7-4-on-demand-content-revalidation: backlog
+  epic-7-retrospective: optional
+
+  # Epic 8: CMS — каталожные данные из CMS и роли (Фаза 3)
+  epic-8: backlog
+  8-1-products-brands-shops-roles: backlog
+  epic-8-retrospective: optional
