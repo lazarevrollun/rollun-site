@@ -6,6 +6,7 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { buildConfig } from 'payload'
 
 import { Users } from './src/collections/Users'
+import { SiteSettings } from './src/globals/SiteSettings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -28,6 +29,7 @@ export default buildConfig({
     },
   },
   collections: [Users],
+  globals: [SiteSettings],
   editor: lexicalEditor(),
   secret: PAYLOAD_SECRET,
   typescript: {

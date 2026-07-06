@@ -10,7 +10,15 @@
  *
  * Nav links are intentionally NOT here — Quick Links reuse `NAV_ITEMS`
  * (nav-config.ts), the single source of the primary navigation.
+ *
+ * Story 7.1: the raw passport atoms (phones, email, addresses) no longer live
+ * here as literals — they moved to the `SiteSettings` global (their single home,
+ * AD-14). `buildFooterContacts(s)` composes the footer's shapes from those atoms
+ * plus the footer's own code-owned labels/sublabels. Prose/legal/copyright atoms
+ * (`COMPANY_BLURB`/`COMPANY_INTRO`/`LEGAL_LINKS`/`COPYRIGHT`) stay in code (AD-6).
  */
+import type { SiteSetting } from '@/payload-types'
+import { registeredAddressLines, shopAddressLines } from '@/lib/site-settings-format'
 
 /** A phone number with the muted purpose label rendered beneath it. */
 export type Phone = {
@@ -54,27 +62,25 @@ export const COMPANY_INTRO =
   'Rollun is a U.S.-based e-commerce and distribution company specializing ' +
   'in automotive parts, motorcycle accessories, and health products.'
 
-/** Phone numbers with their purpose labels (prototype order). */
-export const PHONES: Phone[] = [
-  { number: '(307) 920-0149', label: 'only for legal purposes' },
-  { number: '(832) 461-2525', label: 'shop and return center' },
-]
-
-/** Contact email (rendered as a mailto: link). */
-export const EMAIL = 'info@rollun.com'
-
-/** Physical locations (prototype order); the second sublabel is orange. */
-export const ADDRESSES: Address[] = [
-  {
-    sublabel: 'Only for legal purposes',
-    lines: ['Rollun LC', '30 N Gould St STE 4370', 'Sheridan, WY 82801'],
-  },
-  {
-    sublabel: 'Shop & return center',
-    lines: ['5327 Aldine Mail Route Rd', 'Houston, TX 77039'],
-    accent: true,
-  },
-]
+/**
+ * Compose the footer's contact shapes from the `SiteSettings` passport (AD-14).
+ * The phone/email/address VALUES come from the global; the purpose labels and
+ * address sublabels (with the orange accent on the shop block) are the footer's
+ * own code-owned micro-copy (AD-6). Order matches the prototype.
+ */
+export const buildFooterContacts = (
+  s: SiteSetting,
+): { phones: Phone[]; email: string; addresses: Address[] } => ({
+  phones: [
+    { number: s.phones.legal, label: 'only for legal purposes' },
+    { number: s.phones.shop, label: 'shop and return center' },
+  ],
+  email: s.emails.footer,
+  addresses: [
+    { sublabel: 'Only for legal purposes', lines: registeredAddressLines(s) },
+    { sublabel: 'Shop & return center', lines: shopAddressLines(s), accent: true },
+  ],
+})
 
 /** Legal links (placeholder hrefs in Phase 1). */
 export const LEGAL_LINKS: LegalLink[] = [

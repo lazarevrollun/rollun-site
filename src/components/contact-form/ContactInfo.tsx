@@ -2,8 +2,10 @@
  * ContactInfo — the dark two-tone contact panel (`.cf-info`, Story 2.4) shown to
  * the RIGHT of the form in both display modes that carry it: the desktop modal
  * and the inline `/contact` card. Pure RSC (NO `'use client'`) — it renders
- * static markup only and never fetches; the strings arrive by prop (default:
- * `contactInfoContent`, AD-1/AD-4/AD-14).
+ * static markup only and never fetches; the strings arrive by a REQUIRED `content`
+ * prop, built from the `SiteSettings` passport by the RSC boundary above it
+ * (contact page for the inline card; home/about CtaSection for the modal) and
+ * threaded down through the client islands (AD-4/AD-12/AD-14).
  *
  * Markup + the inline SVG icons are ported pixel-faithfully from the modal
  * prototype (Home.html:1233-1276): a `.cf-item` per group (address / phones /
@@ -14,11 +16,11 @@
  */
 import { Fragment } from 'react'
 
-import { contactInfoContent, type ContactInfoContent } from '@/content/contact-info'
+import { type ContactInfoContent } from '@/content/contact-info'
 
 type ContactInfoProps = {
   /** Panel content (heading / addresses / phones / email / blurb / social). */
-  content?: ContactInfoContent
+  content: ContactInfoContent
 }
 
 /** Render address/phone lines with `<br>` between them, as the prototype does. */
@@ -31,7 +33,7 @@ function withBreaks(lines: string[]) {
   ))
 }
 
-export default function ContactInfo({ content = contactInfoContent }: ContactInfoProps) {
+export default function ContactInfo({ content }: ContactInfoProps) {
   return (
     <div className="cf-info">
       <h3>{content.heading}</h3>

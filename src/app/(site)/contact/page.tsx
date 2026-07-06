@@ -16,17 +16,22 @@
 import Hero from '@/components/contact/Hero'
 import MapLocations from '@/components/contact/MapLocations.client'
 import ContactInline from '@/components/contact-form/ContactInline.client'
-import { contactContent } from '@/content/contact'
+import { buildContactContent } from '@/content/contact'
+import { buildContactInfoContent } from '@/content/contact-info'
+import { getSiteSettings } from '@/lib/site-settings'
 
 import '@/styles/contact.css'
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const settings = await getSiteSettings()
+  const contactContent = buildContactContent(settings)
+  const contactInfo = buildContactInfoContent(settings)
   return (
     <main>
       <Hero hero={contactContent.hero} />
       <section className="contact-section reveal">
         <div className="container">
-          <ContactInline />
+          <ContactInline contactInfo={contactInfo} />
         </div>
       </section>
       <MapLocations map={contactContent.map} />

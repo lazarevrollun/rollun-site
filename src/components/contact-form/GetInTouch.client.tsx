@@ -18,9 +18,14 @@
 import Link from 'next/link'
 import { useCallback, useState } from 'react'
 
+import { type ContactInfoContent } from '@/content/contact-info'
+
 import ContactModal from './ContactModal.client'
 
 type GetInTouchProps = {
+  /** Info-panel content, built from the passport by the RSC that mounts this
+   *  trigger (home/about CtaSection) and only forwarded to the modal (AD-12). */
+  contactInfo: ContactInfoContent
   /** Trigger label (default matches the prototype CTA). */
   label?: string
   /** Optional deep-link topic — preselected in the modal, appended to the mobile link. */
@@ -29,7 +34,7 @@ type GetInTouchProps = {
   className?: string
 }
 
-export default function GetInTouch({ label = 'GET IN TOUCH', topic, className }: GetInTouchProps) {
+export default function GetInTouch({ contactInfo, label = 'GET IN TOUCH', topic, className }: GetInTouchProps) {
   const [open, setOpen] = useState(false)
   // Stable so the modal's effects don't re-subscribe on every render.
   const close = useCallback(() => setOpen(false), [])
@@ -47,7 +52,7 @@ export default function GetInTouch({ label = 'GET IN TOUCH', topic, className }:
       <Link href={href} className={`${base} gitouch-mb`}>
         {label}
       </Link>
-      <ContactModal open={open} onClose={close} deepLinkTopic={topic} />
+      <ContactModal open={open} onClose={close} content={contactInfo} deepLinkTopic={topic} />
     </>
   )
 }

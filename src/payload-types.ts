@@ -85,8 +85,12 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'site-settings': SiteSetting;
+  };
+  globalsSelect: {
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
@@ -270,6 +274,116 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  phones: {
+    legal: string;
+    shop: string;
+  };
+  emails: {
+    footer: string;
+    contact: string;
+  };
+  social: {
+    github: string;
+    linkedin: string;
+  };
+  registeredAddress: {
+    company: string;
+    street: string;
+    city: string;
+    state: string;
+    zip: string;
+  };
+  shopAddress: {
+    street: string;
+    city: string;
+    state: string;
+    zip: string;
+  };
+  hours: {
+    store?:
+      | {
+          day: string;
+          time: string;
+          closed?: boolean | null;
+          id?: string | null;
+        }[]
+      | null;
+    homeCtaDesktop: string;
+    homeCtaMobile: string;
+    aboutCtaDesktop: string;
+    aboutCtaMobile: string;
+    contact: string;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  phones?:
+    | T
+    | {
+        legal?: T;
+        shop?: T;
+      };
+  emails?:
+    | T
+    | {
+        footer?: T;
+        contact?: T;
+      };
+  social?:
+    | T
+    | {
+        github?: T;
+        linkedin?: T;
+      };
+  registeredAddress?:
+    | T
+    | {
+        company?: T;
+        street?: T;
+        city?: T;
+        state?: T;
+        zip?: T;
+      };
+  shopAddress?:
+    | T
+    | {
+        street?: T;
+        city?: T;
+        state?: T;
+        zip?: T;
+      };
+  hours?:
+    | T
+    | {
+        store?:
+          | T
+          | {
+              day?: T;
+              time?: T;
+              closed?: T;
+              id?: T;
+            };
+        homeCtaDesktop?: T;
+        homeCtaMobile?: T;
+        aboutCtaDesktop?: T;
+        aboutCtaMobile?: T;
+        contact?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -19,7 +19,14 @@
  * differ between the two prototypes; the mobile marketplace cards carry no
  * ratings — the ratings live only on `card.rating`, rendered by the desktop
  * composition alone).
+ *
+ * Story 7.1: the CTA hours are passport atoms and moved to `SiteSettings` (their
+ * single home, AD-14). `buildHomeContent(s)` sources `cta.hours.dk/mb` from
+ * `s.hours.homeCtaDesktop/homeCtaMobile`; every other string stays code-owned.
+ * (The CTA social URLs are passport atoms too, but they live in the CtaSection
+ * component's props — see `components/home/CtaSection.tsx` — not in this shape.)
  */
+import type { SiteSetting } from '@/payload-types'
 
 /** A desktop/mobile pair for a string that differs between the two prototypes. */
 export type HomeVariant = { dk: string; mb: string }
@@ -113,8 +120,12 @@ export type HomeContent = {
   }
 }
 
-/** The single Home content instance (AD-14) consumed by the page + sections. */
-export const homeContent: HomeContent = {
+/**
+ * Build the Home content from the `SiteSettings` passport (AD-14). Every string is
+ * code-owned except `cta.hours`, which comes from the passport. The page (RSC)
+ * calls this with the resolved settings.
+ */
+export const buildHomeContent = (s: SiteSetting): HomeContent => ({
   hero: {
     tag: {
       dk: 'U.S.-BASED E-COMMERCE DISTRIBUTION',
@@ -288,8 +299,9 @@ export const homeContent: HomeContent = {
     heading: "Let's talk business",
     intro: 'Wholesale, partnership, and marketplace operations.',
     schedulePrefix: 'Monday to Friday from ',
-    // AD-13: the two prototypes disagree on the hours — reproduced verbatim.
-    hours: { dk: '11:00 to 21:00 UTC', mb: '09:00 to 21:00 UTC+2' },
+    // AD-13: the two prototypes disagree on the hours — reproduced verbatim from
+    // the passport (`homeCtaDesktop` ≠ `homeCtaMobile`).
+    hours: { dk: s.hours.homeCtaDesktop, mb: s.hours.homeCtaMobile },
     scheduleSuffix: '.',
   },
-}
+})

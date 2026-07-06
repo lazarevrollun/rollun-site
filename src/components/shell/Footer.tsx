@@ -20,14 +20,15 @@
 import Link from 'next/link'
 
 import {
-  ADDRESSES,
+  buildFooterContacts,
   COMPANY_BLURB,
   COMPANY_INTRO,
   COPYRIGHT,
-  EMAIL,
   LEGAL_LINKS,
-  PHONES,
+  type Address,
+  type Phone,
 } from '@/content/site-contacts'
+import { getSiteSettings } from '@/lib/site-settings'
 
 import FooterAccordion from './FooterAccordion.client'
 import { NAV_ITEMS } from './nav-config'
@@ -56,10 +57,10 @@ function QuickLinks() {
 }
 
 /** Contacts (phones + email) — shared by both compositions. */
-function Contacts() {
+function Contacts({ phones, email }: { phones: Phone[]; email: string }) {
   return (
     <>
-      {PHONES.map((phone, i) => (
+      {phones.map((phone, i) => (
         <p key={phone.number} style={i > 0 ? { marginTop: '10px' } : undefined}>
           {phone.number}
           <br />
@@ -69,17 +70,17 @@ function Contacts() {
         </p>
       ))}
       <p style={{ marginTop: '10px' }}>
-        <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+        <a href={`mailto:${email}`}>{email}</a>
       </p>
     </>
   )
 }
 
 /** Locations (addresses with sublabels) — shared by both compositions. */
-function Locations() {
+function Locations({ addresses }: { addresses: Address[] }) {
   return (
     <>
-      {ADDRESSES.map((addr) => (
+      {addresses.map((addr) => (
         <div key={addr.lines[0]}>
           <div
             className="sublabel"
@@ -101,7 +102,8 @@ function Locations() {
   )
 }
 
-export default function Footer() {
+export default async function Footer() {
+  const { phones, email, addresses } = buildFooterContacts(await getSiteSettings())
   return (
     <>
       {/* ── Desktop composition (visible ≥768px via shell.css) ── */}
@@ -121,11 +123,11 @@ export default function Footer() {
             </div>
             <div className="col">
               <h4>Contacts</h4>
-              <Contacts />
+              <Contacts phones={phones} email={email} />
             </div>
             <div className="col">
               <h4>Locations</h4>
-              <Locations />
+              <Locations addresses={addresses} />
             </div>
             <div className="col">
               <h4>Legal</h4>
@@ -155,10 +157,10 @@ export default function Footer() {
           <QuickLinks />
         </FooterAccordion>
         <FooterAccordion title="Contacts">
-          <Contacts />
+          <Contacts phones={phones} email={email} />
         </FooterAccordion>
         <FooterAccordion title="Locations">
-          <Locations />
+          <Locations addresses={addresses} />
         </FooterAccordion>
         <div className="footer-bottom">{COPYRIGHT}</div>
       </footer>

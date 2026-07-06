@@ -24,7 +24,15 @@
  * Desktop↔mobile text differences are captured as EXPLICIT fields (never runtime
  * logic): the city string, the directions label, the CTA label, and the store
  * photo alt text.
+ *
+ * Story 7.1: the store's passport atoms (hours, phone, address) moved to the
+ * `SiteSettings` global (their single home, AD-14). `buildShopsContent(s)` sources
+ * `store.hours` / `store.phone` / `store.addressLines` from the passport and keeps
+ * every other string — including the deliberate defects (`cityDk` without a space,
+ * the Conroe `directions.href`) — code-owned (AD-6/AD-13).
  */
+import type { SiteSetting } from '@/payload-types'
+import { shopStoreAddressLines } from '@/lib/site-settings-format'
 
 /** One hours row: `day` label + `time` value; `closed` styles the time cell. */
 export type ShopHours = { day: string; time: string; closed?: boolean }
@@ -64,8 +72,12 @@ export type ShopsContent = {
   shops: { eyebrow: string; title: string; intro: string; cards: ShopCardData[] }
 }
 
-/** The single Our Shops content instance (AD-14) consumed by page + sections. */
-export const shopsContent: ShopsContent = {
+/**
+ * Build the Our Shops content from the `SiteSettings` passport (AD-14). Static
+ * strings are code-owned; `store.hours` / `store.phone` / `store.addressLines`
+ * come from the passport. The page (RSC) calls this with the resolved settings.
+ */
+export const buildShopsContent = (s: SiteSetting): ShopsContent => ({
   hero: {
     eyebrow: 'Where to buy',
     title: 'Our stores',
@@ -84,17 +96,13 @@ export const shopsContent: ShopsContent = {
     locationLabel: 'Location',
     cityDk: 'Houston,Texas',
     cityMb: 'Houston, Texas',
-    addressLines: ['5327 Aldine Mail Route Rd', '77039'],
-    hours: [
-      { day: 'Monday', time: '10 AM – 4 PM' },
-      { day: 'Tuesday', time: '10 AM – 4 PM' },
-      { day: 'Wednesday', time: '10 AM – 4 PM' },
-      { day: 'Thursday', time: '10 AM – 4 PM' },
-      { day: 'Friday', time: '10 AM – 4 PM' },
-      { day: 'Saturday', time: 'Closed', closed: true },
-      { day: 'Sunday', time: 'Closed', closed: true },
-    ],
-    phone: '(832) 461-2525',
+    addressLines: shopStoreAddressLines(s),
+    hours: (s.hours.store ?? []).map((h) => ({
+      day: h.day,
+      time: h.time,
+      ...(h.closed ? { closed: true } : {}),
+    })),
+    phone: s.phones.shop,
     directions: {
       labelDk: 'GET DIRECTIONS',
       labelMb: 'Get directions',
@@ -153,4 +161,4 @@ export const shopsContent: ShopsContent = {
       },
     ],
   },
-}
+})

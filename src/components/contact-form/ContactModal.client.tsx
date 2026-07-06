@@ -28,8 +28,9 @@ type ContactModalProps = {
   open: boolean
   /** Close request (×, backdrop, Esc, resize below 768px, submit success). */
   onClose: () => void
-  /** Info-panel content override (defaults to `contactInfoContent`). */
-  content?: ContactInfoContent
+  /** Info-panel content, built from the passport by the RSC that mounts the
+   *  trigger and only forwarded through here (AD-12). */
+  content: ContactInfoContent
   /** Optional deep-link topic to preselect in the form. */
   deepLinkTopic?: string
 }

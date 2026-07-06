@@ -20,7 +20,16 @@
  * but the iframe shows the typo; clicking tab 0 rebuilds the URL through
  * `encodeURIComponent(tabs[0].q)` and "corrects" it to `5327 Aldine…` — exactly
  * the prototype behaviour. Do NOT collapse `initialSrc` to `tabs[0].q`.
+ *
+ * Story 7.1: the passport atoms (the hero's opening hours, the two map tabs'
+ * addresses) moved to `SiteSettings` (their single home, AD-14). `buildContactContent(s)`
+ * composes `hero.intro` (code prose + `hours.contact`) and each `map.tabs[].addr/q`
+ * from the passport addresses — reproducing the deliberate divergences verbatim
+ * (tab[1] `addr` has NO comma between city and state; `q` does). The tab labels,
+ * `map.eyebrow`/`title`, and the `initialSrc` typo literal stay code-owned (AD-6/AD-13).
  */
+import type { SiteSetting } from '@/payload-types'
+import { registeredMapQuery, shopAddressInline } from '@/lib/site-settings-format'
 
 /** One map location tab: `label` (eyebrow) + `addr` (shown line) + `q` (the
  *  Google-Maps query rebuilt through `encodeURIComponent` on click). */
@@ -32,13 +41,18 @@ export type ContactContent = {
   map: { eyebrow: string; title: string; initialSrc: string; tabs: ContactMapTab[] }
 }
 
-/** The single Contact content instance (AD-14) consumed by page + sections. */
-export const contactContent: ContactContent = {
+/**
+ * Build the Contact content from the `SiteSettings` passport (AD-14). The hero
+ * intro and the two map tabs' addresses come from the passport; the labels,
+ * headings and the `initialSrc` typo literal stay code-owned. The page (RSC)
+ * calls this with the resolved settings.
+ */
+export const buildContactContent = (s: SiteSetting): ContactContent => ({
   hero: {
     eyebrow: 'Get in touch',
     title: 'Contact us',
-    intro:
-      'Wholesale, partnership, and marketplace operations. Monday to Friday from 09:00 to 21:00 UTC+2.',
+    // Code-owned prose sentence; only the trailing hours come from the passport.
+    intro: `Wholesale, partnership, and marketplace operations. Monday to Friday from ${s.hours.contact}.`,
   },
   map: {
     eyebrow: 'Find us',
@@ -49,14 +63,16 @@ export const contactContent: ContactContent = {
     tabs: [
       {
         label: 'Shop and return center',
-        addr: '5327 Aldine Mail Route Rd, Houston, TX 77039',
-        q: '5327 Aldine Mail Route Rd, Houston, TX 77039',
+        addr: shopAddressInline(s),
+        q: shopAddressInline(s),
       },
       {
         label: 'Only for legal purposes',
-        addr: 'Registered Rollun LC — 30 N Gould St STE 4370, Sheridan WY 82801',
-        q: '30 N Gould St STE 4370, Sheridan, WY 82801',
+        // AD-13: `addr` has NO comma between city and state; `q` does — verbatim.
+        // "Registered … —" is code-owned prose; the address atoms come from the passport.
+        addr: `Registered ${s.registeredAddress.company} — ${s.registeredAddress.street}, ${s.registeredAddress.city} ${s.registeredAddress.state} ${s.registeredAddress.zip}`,
+        q: registeredMapQuery(s),
       },
     ],
   },
-}
+})

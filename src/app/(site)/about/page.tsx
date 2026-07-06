@@ -10,11 +10,16 @@ import KeepToShip from '@/components/about/KeepToShip'
 import Snapshot from '@/components/about/Snapshot'
 import Team from '@/components/about/Team'
 import UsPresence from '@/components/about/UsPresence'
-import { aboutContent } from '@/content/about'
+import { buildAboutContent } from '@/content/about'
+import { buildContactInfoContent } from '@/content/contact-info'
+import { getSiteSettings } from '@/lib/site-settings'
 
 import '@/styles/about.css'
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const settings = await getSiteSettings()
+  const aboutContent = buildAboutContent(settings)
+  const contactInfo = buildContactInfoContent(settings)
   return (
     <main>
       <Hero hero={aboutContent.hero} />
@@ -24,7 +29,7 @@ export default function AboutPage() {
       <KeepToShip keeptoship={aboutContent.keeptoship} />
       <UsPresence usPresence={aboutContent.usPresence} />
       <Team team={aboutContent.team} />
-      <CtaSection cta={aboutContent.cta} />
+      <CtaSection cta={aboutContent.cta} social={settings.social} contactInfo={contactInfo} />
     </main>
   )
 }

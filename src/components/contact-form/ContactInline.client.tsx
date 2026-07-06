@@ -14,10 +14,18 @@
  */
 import { useEffect, useState } from 'react'
 
+import { type ContactInfoContent } from '@/content/contact-info'
+
 import ContactForm from './ContactForm.client'
 import ContactInfo from './ContactInfo'
 
-export default function ContactInline() {
+type ContactInlineProps = {
+  /** Panel content, built from the passport by the contact page (RSC) and only
+   *  forwarded here — this client island never fetches (AD-12). */
+  contactInfo: ContactInfoContent
+}
+
+export default function ContactInline({ contactInfo }: ContactInlineProps) {
   const [deepLink, setDeepLink] = useState<{ topic?: string } | undefined>(undefined)
 
   useEffect(() => {
@@ -31,7 +39,7 @@ export default function ContactInline() {
   return (
     <div className="contact-card">
       <ContactForm deepLink={deepLink} />
-      <ContactInfo />
+      <ContactInfo content={contactInfo} />
     </div>
   )
 }

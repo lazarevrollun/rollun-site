@@ -14,7 +14,15 @@
  * `Only for legal purposes`). Per the AD-14 precedent (`COMPANY_BLURB` vs
  * `COMPANY_INTRO`) differing prototypes get their own named atoms rather than a
  * forced reuse. Values ported VERBATIM from the modal prototype (Home.html:1233-1276).
+ *
+ * Story 7.1: the raw passport atoms (addresses, phones, email, social URLs) moved
+ * to the `SiteSettings` global (their single home, AD-14). `buildContactInfoContent(s)`
+ * composes the panel content from those atoms plus the panel's own code-owned
+ * heading/labels/blurb/social-platform labels (AD-6). The panel keeps its DISTINCT
+ * email (`emails.contact` = llc@) from the footer's (`emails.footer` = info@).
  */
+import type { SiteSetting } from '@/payload-types'
+import { registeredAddressLines, shopAddressLines } from '@/lib/site-settings-format'
 
 /** A physical address block; `accent` renders the lines in the canonical orange. */
 export type ContactInfoAddress = {
@@ -54,28 +62,27 @@ export type ContactInfoContent = {
   social: ContactInfoSocial[]
 }
 
-/** The single content instance (default prop of `ContactInfo`). */
-export const contactInfoContent: ContactInfoContent = {
+/**
+ * Compose the info-panel content from the `SiteSettings` passport (AD-14). The
+ * address/phone/email/social VALUES come from the global; the heading, the
+ * address labels, the parenthetical phone labels, the blurb and the social
+ * platform labels are the panel's own code-owned micro-copy (AD-6). Order matches
+ * the modal prototype.
+ */
+export const buildContactInfoContent = (s: SiteSetting): ContactInfoContent => ({
   heading: 'Contact Information',
   addresses: [
-    {
-      label: 'Registered office',
-      lines: ['Rollun LC', '30 N Gould St STE 4370', 'Sheridan, WY 82801'],
-    },
-    {
-      label: 'Shop & return center',
-      lines: ['5327 Aldine Mail Route Rd', 'Houston, TX 77039'],
-      accent: true,
-    },
+    { label: 'Registered office', lines: registeredAddressLines(s) },
+    { label: 'Shop & return center', lines: shopAddressLines(s), accent: true },
   ],
   phones: [
-    { number: '(307) 920-0149', label: '( only for legal purposes)' },
-    { number: '(832) 461-2525', label: '(shop and return center)' },
+    { number: s.phones.legal, label: '( only for legal purposes)' },
+    { number: s.phones.shop, label: '(shop and return center)' },
   ],
-  email: 'llc@rollun.com',
+  email: s.emails.contact,
   blurb: "Send us an email and we'll get in touch shortly.",
   social: [
-    { platform: 'github', href: 'https://github.com/rollun-lc', label: 'GitHub' },
-    { platform: 'linkedin', href: 'https://www.linkedin.com/company/rollun-lc/', label: 'LinkedIn' },
+    { platform: 'github', href: s.social.github, label: 'GitHub' },
+    { platform: 'linkedin', href: s.social.linkedin, label: 'LinkedIn' },
   ],
-}
+})

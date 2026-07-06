@@ -11,11 +11,13 @@
 import Hero from '@/components/shops/Hero'
 import Marketplaces from '@/components/shops/Marketplaces'
 import Store from '@/components/shops/Store'
-import { shopsContent } from '@/content/shops'
+import { buildShopsContent } from '@/content/shops'
+import { getSiteSettings } from '@/lib/site-settings'
 
 import '@/styles/shops.css'
 
-export default function ShopsPage() {
+export default async function ShopsPage() {
+  const shopsContent = buildShopsContent(await getSiteSettings())
   return (
     <main>
       <Hero hero={shopsContent.hero} />

@@ -18,7 +18,17 @@
  * (never runtime logic), including the intentional AD-13 defects (the CTA hours
  * differ between the two prototypes; the Automation "80%" label differs; the
  * mobile-only stat note "Internal benchmark").
+ *
+ * Story 7.1: the passport atoms (CTA hours, the two mobile US-presence card
+ * addresses) moved to `SiteSettings` (their single home, AD-14). `buildAboutContent(s)`
+ * sources `cta.hours.dk/mb` from `s.hours.aboutCtaDesktop/aboutCtaMobile` (keeping
+ * `UTC +2` with the space on desktop vs `UTC+2` on mobile, AD-13) and the two
+ * `usPresence.mobile.cards[].addr` strings from the passport addresses. The CTA
+ * social URLs are passport atoms too but live in `components/about/CtaSection.tsx`
+ * props. Every other string stays code-owned (AD-6).
  */
+import type { SiteSetting } from '@/payload-types'
+import { aboutStoreCardAddr } from '@/lib/site-settings-format'
 
 /** A desktop/mobile pair for a string that differs between the two prototypes. */
 export type AboutVariant = { dk: string; mb: string }
@@ -157,8 +167,12 @@ export type AboutContent = {
   }
 }
 
-/** The single About content instance (AD-14) consumed by the page + sections. */
-export const aboutContent: AboutContent = {
+/**
+ * Build the About content from the `SiteSettings` passport (AD-14). Every string is
+ * code-owned except `cta.hours` and the two mobile US-presence card addresses,
+ * which come from the passport. The page (RSC) calls this with the resolved settings.
+ */
+export const buildAboutContent = (s: SiteSetting): AboutContent => ({
   hero: {
     eyebrowMobile: 'Who we are',
     headline: [
@@ -631,13 +645,14 @@ export const aboutContent: AboutContent = {
           variant: 'hq',
           meta: 'Registered HQ',
           place: 'Sheridan, Wyoming',
-          addr: '30 N Gould St STE 4370 · only for legal purposes',
+          // Passport street atom + code-owned micro-copy (AD-6/AD-14).
+          addr: `${s.registeredAddress.street} · only for legal purposes`,
         },
         {
           variant: 'store',
           meta: 'Brick store & return center',
           place: 'Houston, Texas',
-          addr: '5327 Aldine Mail Route Rd, 77039',
+          addr: aboutStoreCardAddr(s),
         },
       ],
       chips: [
@@ -677,7 +692,8 @@ export const aboutContent: AboutContent = {
     heading: "Let's talk business",
     sub: 'Wholesale, partnership, and marketplace operations.',
     hoursPrefix: 'Monday to Friday from ',
-    // AD-13: desktop renders "UTC +2" (with a space), mobile "UTC+2" — verbatim.
-    hours: { dk: '09:00 to 21:00 UTC +2', mb: '09:00 to 21:00 UTC+2' },
+    // AD-13: desktop renders "UTC +2" (with a space), mobile "UTC+2" — reproduced
+    // verbatim from the passport (`aboutCtaDesktop` ≠ `aboutCtaMobile`).
+    hours: { dk: s.hours.aboutCtaDesktop, mb: s.hours.aboutCtaMobile },
   },
-}
+})
