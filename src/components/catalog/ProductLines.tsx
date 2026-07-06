@@ -20,6 +20,7 @@ import Link from 'next/link'
 
 import type { CatalogContent, CatalogLine, CatalogSubcat } from '@/content/catalog'
 import type { Product, ProductCategory } from '@/content/products'
+import { buildOffers } from '@/lib/offers'
 
 import CatalogCardSlider from './CatalogCardSlider.client'
 import CatalogLineSwitcher from './CatalogLineSwitcher.client'
@@ -95,7 +96,7 @@ function DesktopLineCol({
       {/* Story 5.2 — server-rendered product cards (slider enhanced by the island). */}
       <div className={`product-grid ${productGridClass}`} data-cat={dataCat}>
         {products.map((p) => (
-          <ProductCard key={`${p.brand} ${p.name}`} product={p} variant="dk" />
+          <ProductCard key={`${p.brand} ${p.name}`} product={p} variant="dk" offers={buildOffers(p, side)} />
         ))}
       </div>
       <div className="line-cta">
@@ -144,7 +145,7 @@ function MobileLine({
       {shelves.map((cat) => (
         <div key={cat} className="product-shelf" data-cat={cat}>
           {products[cat].map((p) => (
-            <ProductCard key={`${p.brand} ${p.name}`} product={p} variant="mb" />
+            <ProductCard key={`${p.brand} ${p.name}`} product={p} variant="mb" offers={buildOffers(p, variant)} />
           ))}
         </div>
       ))}

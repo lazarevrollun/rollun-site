@@ -16,11 +16,11 @@
  * `imgs` holds the prototype file NAMES only — Phase 1 renders `Photo N`
  * placeholders (N = `imgs.length`); real product photos arrive later.
  *
- * Marketplace chips on the card are STATIC Amazon + eBay (`CARD_MARKETS`): in the
- * prototype the chip set is `buildOffers(p,cat).slice(0,2)`, whose first two
- * offers are invariantly `amazon`,`ebay` for BOTH lines (Walmart is only the 3rd
- * auto offer, sliced off). Full offers (prices, external URLs, Walmart) are Story
- * 5.3 — `buildOffers` / `lib/offers.ts` are NOT here.
+ * Marketplace chips on the card are the first two runtime-derived offers
+ * (`buildOffers(p, line).slice(0, 2)` — invariantly `amazon`,`ebay` for BOTH
+ * lines; Walmart is only the 3rd auto offer, sliced off). That derivation lives
+ * in the SERVER-ONLY `src/lib/offers.ts` (Story 5.3, AD-9) — offers are NOT a
+ * field here; this module holds only the flat product data.
  */
 
 /** The four product categories that back the Catalog line containers. */
@@ -48,20 +48,10 @@ export type Product = {
   externalId?: string
 }
 
-/** A marketplace shown as a card chip (name + favicon domain). */
-export type Market = { name: string; domain: string }
-
 // Shared image-name sets from the prototype (Phase 1 → placeholders).
 const TIRE = ['cat-tires.png', 'cat-parts.png', 'mototou-product-reflectors.jpg']
 const OIL = ['cat-oils.png', 'cat-parts.png', 'mototou-product-filter.jpg']
 const ELEC = ['cat-electrical.png', 'mototou-product-reflectors.jpg', 'cat-parts.png']
-
-/** Static card marketplace chips — invariantly Amazon + eBay for every line
- *  (see module header). Prices / URLs / Walmart / offers are Story 5.3. */
-export const CARD_MARKETS: Market[] = [
-  { name: 'Amazon', domain: 'amazon.com' },
-  { name: 'eBay', domain: 'ebay.com' },
-]
 
 /** The Catalog product set — VERBATIM from the prototypes' `PRODUCTS` (3 each). */
 export const PRODUCTS: Record<ProductCategory, Product[]> = {

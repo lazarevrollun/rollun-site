@@ -10,10 +10,14 @@
 //
 // The card carries `role="button"` / `tabIndex` / `aria-label` + focus-ring for
 // pixel/DOM fidelity, but NO activating handler — the quick-view `openDetail`
-// (click / Enter / Space) is Story 5.4. Marketplace chips are the STATIC
-// `CARD_MARKETS` (Amazon + eBay); full offers are Story 5.3.
+// (click / Enter / Space) is Story 5.4. Marketplace chips are the first two
+// runtime-derived `offers` (Story 5.3 — invariantly Amazon + eBay for both lines;
+// Walmart is the 3rd auto offer, sliced off). Offers are computed SERVER-side in
+// `ProductLines` via `buildOffers` and handed here as a ready `offers` prop; this
+// RSC imports only the `Offer` type (AD-9 — never the server-only `lib/offers.ts`
+// runtime into a client island).
 import type { Product } from '@/content/products'
-import { CARD_MARKETS } from '@/content/products'
+import type { Offer } from '@/lib/offers'
 
 import FaviconImg from './FaviconImg.client'
 
@@ -56,7 +60,7 @@ function ImgIco() {
   )
 }
 
-export default function ProductCard({ product, variant }: { product: Product; variant: 'dk' | 'mb' }) {
+export default function ProductCard({ product, variant, offers }: { product: Product; variant: 'dk' | 'mb'; offers: Offer[] }) {
   const { brand, domain, name, imgs, specs } = product
   return (
     <div className="product-card" role="button" tabIndex={0} aria-label={`${brand} ${name}`}>
@@ -105,10 +109,10 @@ export default function ProductCard({ product, variant }: { product: Product; va
         <div className="pc-offers">
           <span className="pc-stock">In stock</span>
           <div className="pc-markets">
-            {CARD_MARKETS.map((m) => (
-              <span className="mk" key={m.name}>
-                <FaviconImg domain={m.domain} />
-                {m.name}
+            {offers.slice(0, 2).map((o) => (
+              <span className="mk" key={o.name}>
+                <FaviconImg domain={o.domain} />
+                {o.name}
               </span>
             ))}
           </div>
