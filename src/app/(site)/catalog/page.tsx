@@ -8,6 +8,7 @@ import Entrances from '@/components/catalog/Entrances'
 import Hero from '@/components/catalog/Hero'
 import ProductLines from '@/components/catalog/ProductLines'
 import { catalogContent } from '@/content/catalog'
+import { PRODUCTS } from '@/content/products'
 
 import '@/styles/catalog.css'
 
@@ -16,7 +17,7 @@ export default function CatalogPage() {
     <main>
       <Hero hero={catalogContent.hero} />
       <Entrances entrancesHead={catalogContent.entrancesHead} entrances={catalogContent.entrances} />
-      <ProductLines lines={catalogContent.lines} filter={catalogContent.filter} />
+      <ProductLines lines={catalogContent.lines} filter={catalogContent.filter} products={PRODUCTS} />
       <CtaSection cta={catalogContent.cta} />
     </main>
   )

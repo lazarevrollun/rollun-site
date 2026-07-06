@@ -19,8 +19,11 @@
 import Link from 'next/link'
 
 import type { CatalogContent, CatalogLine, CatalogSubcat } from '@/content/catalog'
+import type { Product, ProductCategory } from '@/content/products'
 
+import CatalogCardSlider from './CatalogCardSlider.client'
 import CatalogLineSwitcher from './CatalogLineSwitcher.client'
+import ProductCard from './ProductCard'
 
 /** The → arrow glyph on the line CTAs (both prototypes, stroke-width 2). */
 function LineArrow() {
@@ -63,12 +66,14 @@ function DesktopLineCol({
   subcatFour,
   productGridClass,
   dataCat,
+  products,
 }: {
   line: CatalogLine
   side: 'health' | 'auto'
   subcatFour: boolean
   productGridClass: string
   dataCat: string
+  products: Product[]
 }) {
   return (
     <div className={`line-col ${side}`}>
@@ -87,8 +92,12 @@ function DesktopLineCol({
         <h3>{line.listingHead.title.dk}</h3>
         <span className="hint">{line.listingHead.hint.dk}</span>
       </div>
-      {/* EMPTY — Story 5.2 fills this from product data. */}
-      <div className={`product-grid ${productGridClass}`} data-cat={dataCat} />
+      {/* Story 5.2 — server-rendered product cards (slider enhanced by the island). */}
+      <div className={`product-grid ${productGridClass}`} data-cat={dataCat}>
+        {products.map((p) => (
+          <ProductCard key={`${p.brand} ${p.name}`} product={p} variant="dk" />
+        ))}
+      </div>
       <div className="line-cta">
         <Link className="btn btn-or" href={line.lineCta.href}>
           {line.lineCta.label.dk}
@@ -106,11 +115,13 @@ function MobileLine({
   variant,
   id,
   shelves,
+  products,
 }: {
   line: CatalogLine
   variant: 'auto' | 'health'
   id: string
-  shelves: string[]
+  shelves: ProductCategory[]
+  products: Record<ProductCategory, Product[]>
 }) {
   return (
     <section className={`catalog-mb line ${variant}`} id={id}>
@@ -129,9 +140,13 @@ function MobileLine({
         <h3>{line.listingHead.title.mb}</h3>
         <span className="hint">{line.listingHead.hint.mb}</span>
       </div>
-      {/* EMPTY — Story 5.2/5.3 fill these from product data. */}
+      {/* Story 5.2 — each shelf server-renders its category's product cards. */}
       {shelves.map((cat) => (
-        <div key={cat} className="product-shelf" data-cat={cat} />
+        <div key={cat} className="product-shelf" data-cat={cat}>
+          {products[cat].map((p) => (
+            <ProductCard key={`${p.brand} ${p.name}`} product={p} variant="mb" />
+          ))}
+        </div>
       ))}
       <div className="line-cta">
         <Link className="btn btn-or" href={line.lineCta.href}>
@@ -146,10 +161,17 @@ function MobileLine({
 export default function ProductLines({
   lines,
   filter,
+  products,
 }: {
   lines: CatalogContent['lines']
   filter: CatalogContent['filter']
+  products: Record<ProductCategory, Product[]>
 }) {
+  // Desktop auto-all container shows ONE representative per category (VERBATIM
+  // prototype mapping: tires[0] / oils[0] / elec[0]) — parallel to Health's 3.
+  // `.filter(Boolean)` mirrors the prototype's `if (PRODUCTS[c] && PRODUCTS[c][0])`
+  // guard: an empty category is skipped rather than crashing the RSC render.
+  const autoRepresentatives = [products.tires[0], products.oils[0], products.elec[0]].filter(Boolean)
   return (
     <>
       {/* ── Desktop composition — hidden until the island adds `.active` ── */}
@@ -167,9 +189,9 @@ export default function ProductLines({
           </div>
           <div className="split-grid">
             {/* HEALTH (left) */}
-            <DesktopLineCol line={lines.health} side="health" subcatFour productGridClass="health-products" dataCat="health" />
+            <DesktopLineCol line={lines.health} side="health" subcatFour productGridClass="health-products" dataCat="health" products={products.health} />
             {/* AUTOMOTIVE (right) */}
-            <DesktopLineCol line={lines.auto} side="auto" subcatFour={false} productGridClass="cat-grid" dataCat="auto-all" />
+            <DesktopLineCol line={lines.auto} side="auto" subcatFour={false} productGridClass="cat-grid" dataCat="auto-all" products={autoRepresentatives} />
           </div>
         </div>
         {/* Leaf 'use client' island — choose() + deep-link. Renders null. */}
@@ -177,8 +199,11 @@ export default function ProductLines({
       </section>
 
       {/* ── Mobile composition — static stacked lines with canonical anchors ── */}
-      <MobileLine line={lines.auto} variant="auto" id="automotive" shelves={['tires', 'oils', 'elec']} />
-      <MobileLine line={lines.health} variant="health" id="health" shelves={['health']} />
+      <MobileLine line={lines.auto} variant="auto" id="automotive" shelves={['tires', 'oils', 'elec']} products={products} />
+      <MobileLine line={lines.health} variant="health" id="health" shelves={['health']} products={products} />
+
+      {/* Leaf 'use client' island — enhances every card's slider. Renders null. */}
+      <CatalogCardSlider />
     </>
   )
 }

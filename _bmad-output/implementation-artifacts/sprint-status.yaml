@@ -85,7 +85,7 @@ development_status:
   # Epic 5: Каталог (Catalog)
   epic-5: backlog
   5-1-catalog-scaffold-lines-switching: done
-  5-2-product-card-image-slider: backlog
+  5-2-product-card-image-slider: done
   5-3-offers-runtime-buildoffers: backlog
   5-4-product-quick-view: backlog
   5-5-brand-marquee: backlog
