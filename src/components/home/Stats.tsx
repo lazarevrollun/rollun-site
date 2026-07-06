@@ -7,14 +7,24 @@
 // preserved on `.stat-value` so Story 3.4 can attach a count-up island and read
 // the numeric target without rewriting the markup. Background photo is a
 // `.stats-bg` layer (loads only for the visible composition — the other is
-// `display:none`).
+// `display:none`). Story 3.4 mounts <StatsCounter/> (a leaf island) which reads
+// `data-final`/`data-format`/`data-suffix` and counts each value up on scroll.
 import type { HomeContent, HomeStat } from '@/content/home'
 
-/** A single stat cell — `display` is shown; `value`/`suffix` feed Story 3.4. */
+import StatsCounter from './StatsCounter.client'
+
+/** A single stat cell — `display` is shown; `value`/`suffix`/`display` feed Story 3.4.
+ *  `data-format` mirrors the prototype: `comma` when `display` has a thousands
+ *  separator (only `80,000`), else `plain` — so the island is a verbatim port. */
 function StatCell({ stat }: { stat: HomeStat }) {
   return (
     <div className="stat">
-      <div className="stat-value" data-final={stat.value} data-suffix={stat.suffix}>
+      <div
+        className="stat-value"
+        data-final={stat.value}
+        data-format={stat.display.includes(',') ? 'comma' : 'plain'}
+        data-suffix={stat.suffix}
+      >
         {stat.display}
       </div>
       <div className="stat-label">{stat.label}</div>
@@ -52,6 +62,9 @@ export default function Stats({ stats }: { stats: HomeContent['stats'] }) {
           </div>
         </div>
       </section>
+
+      {/* Story 3.4 count-up island — enhances both SSR frames, renders null. */}
+      <StatsCounter />
     </>
   )
 }
