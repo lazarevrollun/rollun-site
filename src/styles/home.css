@@ -1261,6 +1261,9 @@
     .home-dk .mosaic-tile {
       transition: none;
     }
+    .home-dk .line-slide {
+      transition: none;
+    }
     .home-mb .mosaic-feature {
       opacity: 1;
       transform: none;

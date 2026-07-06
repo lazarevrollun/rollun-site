@@ -11,6 +11,8 @@ import Link from 'next/link'
 
 import type { HomeContent, HomeProductLine } from '@/content/home'
 
+import ProductLineSwitcher from './ProductLineSwitcher.client'
+
 /** Static slide-position classes for the first-slide-active frame (order matches
  *  the prototype `setActive(0)`: active / next / (hidden) / prev). */
 const SLIDE_POSITIONS = ['active', 'next', '', 'prev']
@@ -26,9 +28,9 @@ function ArrowIcon() {
 }
 
 /** Desktop carousel block — static first-slide-active frame. */
-function DesktopLine({ line, href }: { line: HomeProductLine; href: string }) {
+function DesktopLine({ line, href, lineKey }: { line: HomeProductLine; href: string; lineKey: string }) {
   return (
-    <div className="line-block">
+    <div className="line-block" data-line={lineKey}>
       <div className="line-stack">
         {line.slidesDesktop.map((slide, i) => (
           <div key={slide.src} className={`line-slide ${SLIDE_POSITIONS[i]}`.trim()} data-i={i}>
@@ -40,7 +42,7 @@ function DesktopLine({ line, href }: { line: HomeProductLine; href: string }) {
       </div>
       <div className="line-dots">
         {line.slidesDesktop.map((slide, i) => (
-          <button key={slide.src} type="button" className={i === 0 ? 'active' : undefined} data-i={i}>
+          <button key={slide.src} type="button" className={i === 0 ? 'active' : undefined} data-i={i} aria-pressed={i === 0}>
             {i + 1}
           </button>
         ))}
@@ -86,10 +88,18 @@ export default function ProductLines({ productLines }: { productLines: HomeConte
           <h2 className="section-title">{title}</h2>
           <p className="lines-intro">{intro}</p>
           <div className="lines-grid">
-            <DesktopLine line={automotive} href="/catalog#automotive" />
-            <DesktopLine line={health} href="/catalog#health" />
+            <DesktopLine line={automotive} href="/catalog#automotive" lineKey="automotive" />
+            <DesktopLine line={health} href="/catalog#health" lineKey="health" />
           </div>
         </div>
+        {/* Leaf 'use client' island — enhances the static desktop carousels with
+            manual click switching + hash sync. Renders null; placement is inert. */}
+        <ProductLineSwitcher
+          lines={[
+            { key: 'automotive', count: automotive.slidesDesktop.length },
+            { key: 'health', count: health.slidesDesktop.length },
+          ]}
+        />
       </section>
 
       {/* ── Mobile composition ── */}
