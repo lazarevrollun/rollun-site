@@ -1,0 +1,751 @@
+/*
+ * Our Shops section styles (Story 6.2) — imported by app/(site)/shops/page.tsx
+ * AFTER the layout's theme.css → components.css → shell.css, so DS tokens +
+ * global .btn / .reveal resolve first.
+ *
+ * TWO compositions live here, exactly like Brands/About (AD-3 / NFR-2): the
+ * desktop subtree (`.shops-dk`, ported from Our Shops.html) and the mobile
+ * subtree (`.shops-mb`, ported from Our Shops Mobile.html + mobile.css). Both
+ * SSR into one DOM; the visible one is chosen ONLY by the CSS `@media` at 768px
+ * below — desktop rules inside `(min-width:768px)`, mobile inside its exact
+ * complement `not all and (min-width:768px)` — so exactly one composition shows
+ * at EVERY width and the two never collide even though they reuse prototype
+ * class names. NO JS width-gating.
+ *
+ * Values are ported VERBATIM from the prototypes (AD-13 > AD-2). Palette / fonts
+ * / gutters that exist as DS tokens are written through the token; prototype-only
+ * literals (shadows, all `rgba(255,255,255,…)`, data-URI masks) stay verbatim.
+ * `.btn` / `.btn-or` / `.reveal` / global tokens are NOT redefined.
+ *
+ * Root-node classes use COMPOUND selectors (`.shops-dk.store`, `.shops-mb.section.bg`)
+ * NOT descendant combinators — otherwise a section-root rule would never match.
+ */
+
+@layer components {
+  /* Composition switch — both hidden by default; the media blocks reveal one. */
+  .shops-dk,
+  .shops-mb {
+    display: none;
+  }
+
+  /* ══════════════════════════  DESKTOP (≥768px)  ══════════════════════════ */
+  @media (min-width: 768px) {
+    .shops-dk {
+      display: block;
+    }
+
+    /* Heading + inline primitives (prototype global reset). */
+    .shops-dk h1,
+    .shops-dk h2,
+    .shops-dk h3,
+    .shops-dk h4 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      letter-spacing: -0.005em;
+      margin: 0;
+      line-height: 1.1;
+      color: var(--color-ink);
+    }
+    .shops-dk p {
+      margin: 0;
+    }
+    .shops-dk .container {
+      max-width: var(--spacing-container);
+      margin: 0 auto;
+      padding: 0 var(--spacing-gutter);
+    }
+
+    /* ─────────────  PAGE HERO (01)  ───────────── */
+    .shops-dk.page-hero {
+      background: var(--color-dark);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 110px 0 40px;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+    .shops-dk.page-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(1000px 500px at 50% 0%, rgba(239, 127, 26, 0.14), transparent 65%);
+      pointer-events: none;
+    }
+    .shops-dk.page-hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+    }
+    .shops-dk .page-hero-inner {
+      position: relative;
+      z-index: 2;
+    }
+    .shops-dk.page-hero .eyebrow {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--color-or);
+      margin-bottom: 18px;
+    }
+    .shops-dk.page-hero h1 {
+      color: #fff;
+      font-size: clamp(40px, 5.4vw, 72px);
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+    }
+    .shops-dk.page-hero p {
+      color: rgba(255, 255, 255, 0.72);
+      max-width: 620px;
+      margin: 0 auto;
+      font-size: 17px;
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    /* ─────────────  SECTION SHELL (02 + 03)  ───────────── */
+    .shops-dk .section-eyebrow {
+      text-align: center;
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--color-or);
+      margin-bottom: 14px;
+    }
+    .shops-dk .section-title {
+      text-align: center;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: clamp(28px, 3.2vw, 44px);
+      text-transform: uppercase;
+      letter-spacing: 0.01em;
+      margin-bottom: 16px;
+    }
+    .shops-dk .section-intro {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto;
+      color: var(--color-ink-soft);
+      font-size: 16.5px;
+    }
+
+    /* ─────────────  PHYSICAL STORE (02)  ───────────── */
+    .shops-dk.store {
+      padding: clamp(40px, 7vh, 90px) 0;
+      background: var(--color-bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .shops-dk .store-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 24px;
+      margin-top: clamp(24px, 3.5vh, 48px);
+      align-items: stretch;
+    }
+    .shops-dk .store-media {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      min-height: 0;
+    }
+    .shops-dk .store-photo-feature {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      flex: 1;
+      min-height: 0;
+      box-shadow: 0 30px 70px -40px rgba(0, 0, 0, 0.5);
+      background: var(--color-dark-2);
+    }
+    .shops-dk .store-photo-feature img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 14%;
+      display: block;
+    }
+    .shops-dk .store-info {
+      background: var(--color-dark);
+      color: #fff;
+      border-radius: 20px;
+      align-self: start;
+      padding: clamp(24px, 3vh, 40px) clamp(24px, 2.4vw, 40px);
+    }
+    .shops-dk .store-info h3 {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--color-or);
+      margin-bottom: 18px;
+    }
+    .shops-dk .store-info .city {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 30px;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .shops-dk .store-info .addr {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 15px;
+      margin-bottom: clamp(14px, 2vh, 28px);
+    }
+    .shops-dk .hours-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: clamp(14px, 2vh, 28px);
+    }
+    .shops-dk .hours-table td {
+      padding: clamp(6px, 1vh, 11px) 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 15px;
+    }
+    .shops-dk .hours-table td.day {
+      color: rgba(255, 255, 255, 0.85);
+      font-family: var(--font-display);
+      font-weight: 500;
+    }
+    .shops-dk .hours-table td.time {
+      text-align: right;
+      color: #fff;
+    }
+    .shops-dk .hours-table tr.closed td.time {
+      color: var(--color-or);
+      font-weight: 500;
+    }
+    .shops-dk .store-phone {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: clamp(14px, 2vh, 26px);
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .shops-dk .store-phone svg {
+      width: 22px;
+      height: 22px;
+      color: var(--color-or);
+      flex: none;
+    }
+
+    /* ─────────────  ONLINE SHOPS (03)  ───────────── */
+    .shops-dk.shops {
+      padding: clamp(40px, 7vh, 90px) 0;
+      background: var(--color-paper);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .shops-dk .shop-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      max-width: 940px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: clamp(28px, 4vh, 58px);
+    }
+    .shops-dk .shop-card {
+      background: #fff;
+      border-radius: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 40px -28px rgba(0, 0, 0, 0.25);
+      transition: box-shadow 0.35s ease, transform 0.35s ease;
+    }
+    .shops-dk .shop-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 0 0 2px var(--color-or-soft) inset, 0 26px 50px -28px rgba(239, 127, 26, 0.5);
+    }
+    .shops-dk .shop-shot {
+      display: block;
+      text-decoration: none;
+      aspect-ratio: 12 / 5;
+      overflow: hidden;
+      background: #f1f1f1;
+      border-bottom: 1px solid var(--color-line);
+    }
+    .shops-dk .shop-shot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .shops-dk .shop-card:hover .shop-shot img {
+      transform: scale(1.03);
+    }
+    .shops-dk .shop-shot.scroll-shot img {
+      transition: object-position 7s ease;
+    }
+    .shops-dk .shop-card:hover .shop-shot.scroll-shot img {
+      object-position: center bottom;
+      transform: none;
+    }
+    .shops-dk .shop-body {
+      padding: clamp(20px, 2.6vh, 28px) 32px clamp(22px, 3vh, 34px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      flex: 1;
+    }
+    .shops-dk .shop-logo {
+      height: clamp(44px, 5vh, 56px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: clamp(10px, 1.6vh, 16px);
+    }
+    .shops-dk .shop-logo img {
+      height: 46px;
+      width: auto;
+    }
+    /* Amazon */
+    .shops-dk .shop-logo .amazon-wrap {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .shops-dk .shop-logo .amazon {
+      color: #232f3e;
+      font-size: 36px;
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      font-family: var(--font-display);
+    }
+    .shops-dk .shop-logo .amazon-smile {
+      width: 108px;
+      height: 18px;
+      margin-top: -4px;
+      color: #ff9900;
+    }
+    /* Walmart */
+    .shops-dk .shop-logo .walmart-wrap {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .shops-dk .shop-logo .walmart-spark {
+      width: 30px;
+      height: 30px;
+      color: #ffc220;
+    }
+    .shops-dk .shop-logo .walmart {
+      color: #0071ce;
+      font-size: 27px;
+      font-weight: 700;
+      line-height: 1;
+      font-family: var(--font-display);
+    }
+
+    /* Rating */
+    .shops-dk .rating {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: clamp(12px, 1.8vh, 20px);
+    }
+    .shops-dk .stars {
+      --pct: 100%;
+      position: relative;
+      display: inline-block;
+      font-size: 19px;
+      line-height: 1;
+      letter-spacing: 2px;
+      font-family: 'Arial', sans-serif;
+    }
+    .shops-dk .stars::before {
+      content: "\2605\2605\2605\2605\2605";
+      color: #ddd6cb;
+    }
+    .shops-dk .stars::after {
+      content: "\2605\2605\2605\2605\2605";
+      color: var(--color-or);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: var(--pct);
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .shops-dk .rating .score {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--color-ink);
+    }
+    .shops-dk .rating .meta {
+      font-size: 12.5px;
+      color: var(--color-ink-mute);
+    }
+    .shops-dk .shop-body > p {
+      color: var(--color-ink-soft);
+      font-size: 15px;
+      margin-bottom: clamp(16px, 2.4vh, 26px);
+    }
+    .shops-dk .shop-body .btn {
+      margin-top: auto;
+    }
+  }
+
+  /* Desktop internal breakpoint (visible 768–980px band) — stack wide grids. */
+  @media (min-width: 768px) and (max-width: 980px) {
+    .shops-dk .shop-grid {
+      grid-template-columns: 1fr;
+      max-width: 460px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .shops-dk .store-grid {
+      grid-template-columns: 1fr;
+    }
+    .shops-dk .store-photo-feature {
+      aspect-ratio: 3 / 4;
+      min-height: 0;
+      max-width: 440px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+    }
+  }
+
+  /* ══════════════  MOBILE (<768px, exact complement of desktop)  ══════════ */
+  @media not all and (min-width: 768px) {
+    .shops-mb {
+      display: block;
+    }
+
+    .shops-mb h1,
+    .shops-mb h2,
+    .shops-mb h3,
+    .shops-mb h4 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      letter-spacing: -0.005em;
+      margin: 0;
+      line-height: 1.12;
+      color: var(--color-ink);
+    }
+    .shops-mb p {
+      margin: 0;
+    }
+    .shops-mb .wrap {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    /* Section primitives (mobile.css). */
+    .shops-mb.section {
+      padding: 46px 0 50px;
+    }
+    .shops-mb.section.bg {
+      background: var(--color-bg);
+    }
+    .shops-mb.section.paper {
+      background: var(--color-paper);
+    }
+    .shops-mb .section-eyebrow {
+      font-family: var(--font-display);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-or);
+      margin-bottom: 10px;
+    }
+    .shops-mb .section-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 27px;
+      text-transform: uppercase;
+      letter-spacing: 0.01em;
+      line-height: 1.1;
+    }
+    .shops-mb .section-head {
+      margin-bottom: 26px;
+    }
+    .shops-mb .section-head p {
+      color: var(--color-ink-soft);
+      font-size: 14.5px;
+      line-height: 1.6;
+      margin-top: 12px;
+    }
+
+    /* ─────────────  PAGE HERO (01)  ───────────── */
+    .shops-mb.page-hero {
+      background: var(--color-dark);
+      color: #fff;
+      padding: 104px 22px 56px;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+    .shops-mb.page-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(700px 360px at 50% 0%, rgba(239, 127, 26, 0.16), transparent 65%);
+      pointer-events: none;
+    }
+    .shops-mb .page-hero-inner {
+      position: relative;
+      z-index: 2;
+    }
+    .shops-mb.page-hero .eyebrow {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-or);
+      margin-bottom: 14px;
+    }
+    .shops-mb.page-hero h1 {
+      color: #fff;
+      font-size: 42px;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      margin-bottom: 16px;
+      line-height: 1.06;
+    }
+    .shops-mb.page-hero p {
+      color: rgba(255, 255, 255, 0.74);
+      font-size: 15.5px;
+      font-weight: 300;
+      line-height: 1.6;
+      max-width: 360px;
+      margin: 0 auto;
+    }
+
+    /* ─────────────  PHYSICAL STORE (02)  ───────────── */
+    .shops-mb .store-photo {
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      background: var(--color-dark);
+      margin-bottom: 22px;
+      box-shadow: 0 18px 40px -28px rgba(0, 0, 0, 0.5);
+    }
+    .shops-mb .store-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .shops-mb .store-info h3 {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--color-ink-mute);
+      margin-bottom: 8px;
+    }
+    .shops-mb .store-info .city {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 26px;
+      margin-bottom: 4px;
+    }
+    .shops-mb .store-info .addr {
+      color: var(--color-ink-soft);
+      font-size: 14px;
+      white-space: pre-line;
+      margin-bottom: 20px;
+    }
+    .shops-mb .hours-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 18px;
+    }
+    .shops-mb .hours-table td {
+      padding: 11px 0;
+      border-bottom: 1px solid var(--color-line);
+      font-size: 14px;
+    }
+    .shops-mb .hours-table .day {
+      color: var(--color-ink);
+      font-weight: 500;
+      font-family: var(--font-display);
+    }
+    .shops-mb .hours-table .time {
+      text-align: right;
+      color: var(--color-ink-soft);
+      font-family: 'Spline Sans Mono', var(--font-mono);
+    }
+    .shops-mb .hours-table tr.closed .time {
+      color: var(--color-ink-mute);
+    }
+    .shops-mb .hours-table tr:last-child td {
+      border-bottom: none;
+    }
+    .shops-mb .store-phone {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 16px;
+      color: var(--color-ink);
+      margin-bottom: 20px;
+    }
+    .shops-mb .store-phone svg {
+      width: 19px;
+      height: 19px;
+      color: var(--color-or);
+    }
+    .shops-mb .store-info .btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* ─────────────  ONLINE SHOPS (03)  ───────────── */
+    .shops-mb .shop-list {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .shops-mb .shop-card {
+      background: #fff;
+      border: 1px solid var(--color-line);
+      overflow: hidden;
+      box-shadow: 0 14px 32px -26px rgba(0, 0, 0, 0.35);
+    }
+    .shops-mb .shop-shot {
+      display: block;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      background: var(--color-paper);
+    }
+    .shops-mb .shop-shot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+    .shops-mb .shop-shot.scroll-shot img {
+      transition: object-position 7s ease;
+    }
+    .shops-mb .shop-card:hover .shop-shot.scroll-shot img,
+    .shops-mb .shop-card:active .shop-shot.scroll-shot img {
+      object-position: center bottom;
+    }
+    .shops-mb .shop-body {
+      padding: 20px 20px 22px;
+    }
+    .shops-mb .shop-logo {
+      height: 46px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .shops-mb .shop-logo img {
+      height: 40px;
+      width: auto;
+    }
+    .shops-mb .shop-logo .amazon-wrap {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .shops-mb .shop-logo .amazon {
+      color: #232f3e;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+    .shops-mb .shop-logo .amazon-smile {
+      width: 82px;
+      height: 13px;
+      margin-top: -3px;
+      color: #ff9900;
+    }
+    .shops-mb .shop-logo .walmart-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+    }
+    .shops-mb .shop-logo .walmart-spark {
+      width: 28px;
+      height: 28px;
+      color: #ffc220;
+    }
+    .shops-mb .shop-logo .walmart {
+      color: #0071ce;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 1;
+    }
+    .shops-mb .rating {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      margin-bottom: 14px;
+    }
+    .shops-mb .stars {
+      --pct: 100%;
+      width: 96px;
+      height: 17px;
+      background: linear-gradient(90deg, var(--color-or) var(--pct), #d8d8d8 var(--pct));
+      -webkit-mask: repeating-linear-gradient(90deg, #000 0 14px, transparent 14px 19.2px);
+      mask: repeating-linear-gradient(90deg, #000 0 14px, transparent 14px 19.2px);
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='17' viewBox='0 0 96 17'%3E%3Cg fill='%23000'%3E%3Cpath d='M8.5 1l2 4.2 4.6.5-3.4 3.1 1 4.6-4.2-2.4-4.2 2.4 1-4.6L2.4 5.7 7 5.2z'/%3E%3Cpath d='M27.7 1l2 4.2 4.6.5-3.4 3.1 1 4.6-4.2-2.4-4.2 2.4 1-4.6-3.4-3.1 4.6-.5z'/%3E%3Cpath d='M46.9 1l2 4.2 4.6.5-3.4 3.1 1 4.6-4.2-2.4-4.2 2.4 1-4.6-3.4-3.1 4.6-.5z'/%3E%3Cpath d='M66.1 1l2 4.2 4.6.5-3.4 3.1 1 4.6-4.2-2.4-4.2 2.4 1-4.6-3.4-3.1 4.6-.5z'/%3E%3Cpath d='M85.3 1l2 4.2 4.6.5-3.4 3.1 1 4.6-4.2-2.4-4.2 2.4 1-4.6-3.4-3.1 4.6-.5z'/%3E%3C/g%3E%3C/svg%3E");
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='17' viewBox='0 0 96 17'%3E%3Cg fill='%23000'%3E%3Cpath d='M8.5 1l2 4.2 4.6.5-3.4 3.1 1 4.6-4.2-2.4-4.2 2.4 1-4.6L2.4 5.7 7 5.2z'/%3E%3Cpath d='M27.7 1l2 4.2 4.6.5-3.4 3.1 1 4.6-4.2-2.4-4.2 2.4 1-4.6-3.4-3.1 4.6-.5z'/%3E%3Cpath d='M46.9 1l2 4.2 4.6.5-3.4 3.1 1 4.6-4.2-2.4-4.2 2.4 1-4.6-3.4-3.1 4.6-.5z'/%3E%3Cpath d='M66.1 1l2 4.2 4.6.5-3.4 3.1 1 4.6-4.2-2.4-4.2 2.4 1-4.6-3.4-3.1 4.6-.5z'/%3E%3Cpath d='M85.3 1l2 4.2 4.6.5-3.4 3.1 1 4.6-4.2-2.4-4.2 2.4 1-4.6-3.4-3.1 4.6-.5z'/%3E%3C/g%3E%3C/svg%3E");
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+    }
+    .shops-mb .rating .score {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--color-ink);
+    }
+    .shops-mb .rating .meta {
+      font-size: 12px;
+      color: var(--color-ink-mute);
+    }
+    .shops-mb .shop-body p {
+      color: var(--color-ink-soft);
+      font-size: 13.5px;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
+    .shops-mb .shop-body .btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}

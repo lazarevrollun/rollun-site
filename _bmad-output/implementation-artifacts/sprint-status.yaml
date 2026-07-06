@@ -94,7 +94,7 @@ development_status:
   # Epic 6: Бренд, магазины и контакты (Our Brands / Our Shops / Contact)
   epic-6: backlog
   6-1-our-brands-mototou-showcase: done
-  6-2-our-shops-store-marketplaces: backlog
+  6-2-our-shops-store-marketplaces: done
   6-3-contact-inline-form-map-location-tabs: backlog
   epic-6-retrospective: optional
 
