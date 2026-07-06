@@ -14,7 +14,17 @@ import { useEffect, useRef } from 'react'
  * third-party favicon, so the `@next/next/no-img-element` lint is suppressed
  * per-line (same precedent as 5.1's `SubcatTile`).
  */
-export default function FaviconImg({ domain, className }: { domain: string; className?: string }) {
+export default function FaviconImg({
+  domain,
+  className,
+  size = 64,
+}: {
+  domain: string
+  className?: string
+  /** Google favicon `&sz=` (default 64). The brands marquee passes 128 for a
+   *  sharper 34px logo; existing callers keep the 64 default unchanged. */
+  size?: number
+}) {
   const ref = useRef<HTMLImageElement>(null)
   // The SSR'd <img> can 404 BEFORE React hydration attaches `onError`, leaving a
   // broken icon visible (the prototype's native `onerror=` attribute caught this;
@@ -29,7 +39,7 @@ export default function FaviconImg({ domain, className }: { domain: string; clas
     <img
       ref={ref}
       className={className}
-      src={`https://www.google.com/s2/favicons?domain=${domain}&sz=64`}
+      src={`https://www.google.com/s2/favicons?domain=${domain}&sz=${size}`}
       alt=""
       onError={(e) => {
         e.currentTarget.style.visibility = 'hidden'

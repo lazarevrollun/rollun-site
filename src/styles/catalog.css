@@ -2175,4 +2175,342 @@
       line-height: 1.5;
     }
   }
+
+  /* ═══════════════  Story 5.5 — BRANDS WALL + marquee (desktop ≥768px)  ═══════════════ */
+  /* Ported VERBATIM from Catalog.html <style> (~759-850), scoped to `.catalog-dk`.
+     Raw prototype vars → DS tokens; Poppins → `--font-display`; literal shadows,
+     rgba(255,255,255,…), edge-mask % and the ext-arrow data-URI stay as-is. The
+     dead `.logo-grid`/`.bw-note` prototype rules (no matching markup) are omitted. */
+  @media (min-width: 768px) {
+    .catalog-dk.brands-wall {
+      padding: 100px 0;
+      background: var(--color-dark);
+      color: #fff;
+    }
+    .catalog-dk.brands-wall .section-eyebrow {
+      color: var(--color-or);
+    }
+    .catalog-dk.brands-wall .section-title {
+      color: #fff;
+    }
+    .catalog-dk .bw-head {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+    .catalog-dk .bw-head p {
+      color: rgba(255, 255, 255, 0.6);
+      max-width: 560px;
+      margin: 16px auto 0;
+      font-size: 16px;
+    }
+    .catalog-dk .bw-cat {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.5);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .catalog-dk .bw-cat::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.14);
+    }
+    .catalog-dk .logo-marquee {
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 44px;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+      mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+    }
+    .catalog-dk .logo-track {
+      display: flex;
+      width: max-content;
+      align-items: center;
+      animation: marquee-left 48s linear infinite;
+    }
+    .catalog-dk .logo-track.rev {
+      animation: marquee-right 34s linear infinite;
+    }
+    .catalog-dk .logo-marquee:hover .logo-track {
+      animation-play-state: paused;
+    }
+    .catalog-dk .logo-tile {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex: none;
+      height: 66px;
+      padding: 0 42px;
+      white-space: nowrap;
+      text-decoration: none;
+      cursor: pointer;
+      transition: opacity 0.25s ease;
+    }
+    .catalog-dk .logo-tile .fav {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+      flex: none;
+      display: block;
+    }
+    .catalog-dk .logo-tile:not(.linkless) {
+      cursor: pointer;
+    }
+    .catalog-dk .logo-tile:hover .wm {
+      color: var(--color-or);
+    }
+    .catalog-dk .logo-tile .wm {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 15px;
+      letter-spacing: 0.01em;
+      color: rgba(255, 255, 255, 0.82);
+      line-height: 1.15;
+      text-decoration: none;
+      transition: color 0.25s ease;
+    }
+    .catalog-dk .logo-tile:hover .wm {
+      color: #fff;
+    }
+    .catalog-dk a.logo-tile::after {
+      content: '';
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 16px;
+      height: 16px;
+      background: no-repeat center / contain
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23EF7F1A' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 17 17 7'/%3E%3Cpath d='M7 7h10v10'/%3E%3C/svg%3E");
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .catalog-dk a.logo-tile:hover::after {
+      opacity: 1;
+    }
+  }
+
+  /* ═══════════════  Story 5.5 — BRANDS WALL + marquee (mobile <768px)  ═══════════════ */
+  /* Ported VERBATIM from Catalog Mobile.html <style> (~254-270), scoped to `.catalog-mb`.
+     Values differ from desktop (tile 54px, durations 40s/30s, mask 9%/91%, no hover
+     pause, no ext-arrow) — kept as-is for pixel parity. Tiles are inert on mobile. */
+  @media not all and (min-width: 768px) {
+    .catalog-mb.brands-wall {
+      padding: 48px 0 50px;
+      background: var(--color-dark);
+      color: #fff;
+    }
+    .catalog-mb.brands-wall .section-eyebrow {
+      color: var(--color-or);
+    }
+    .catalog-mb .bw-head {
+      text-align: center;
+      padding: 0 20px;
+      margin-bottom: 30px;
+    }
+    .catalog-mb .bw-head .section-title {
+      color: #fff;
+    }
+    .catalog-mb .bw-head p {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 14px;
+      margin: 12px auto 0;
+      max-width: 320px;
+    }
+    .catalog-mb .bw-cat {
+      font-family: var(--font-display);
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.55);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 0 20px 18px;
+    }
+    .catalog-mb .bw-cat::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.14);
+    }
+    .catalog-mb .logo-marquee {
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 30px;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+      mask-image: linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+    }
+    .catalog-mb .logo-track {
+      display: flex;
+      width: max-content;
+      align-items: center;
+      animation: marquee-left 40s linear infinite;
+    }
+    .catalog-mb .logo-track.rev {
+      animation: marquee-right 30s linear infinite;
+    }
+    .catalog-mb .logo-tile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: none;
+      height: 54px;
+      padding: 0 26px;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .catalog-mb .logo-tile .fav {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+      flex: none;
+      display: block;
+    }
+    .catalog-mb .logo-tile .wm {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.82);
+    }
+  }
+
+  /* Marquee keyframes — GLOBAL. Both compositions use the same names; @keyframes are
+     global regardless of nesting, so they are declared ONCE here (not per media block)
+     to avoid duplication. Story 5.5 (Catalog.html ~800-801 / Catalog Mobile.html ~265-266). */
+  @keyframes marquee-left {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @keyframes marquee-right {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  /* ═══════════  Story 5.5 — LOGO SPOTLIGHT overlay (GLOBAL, not scoped)  ═══════════ */
+  /* The fly-to-center overlay is appended to `document.body` by the `BrandSpotlight`
+     island, so its CSS is intentionally NOT scoped under `.catalog-*`. Ported VERBATIM
+     from Catalog.html <style> (~565-623). Raw vars → DS tokens; Poppins → --font-display;
+     literal rgba backdrops/shadows, px, transitions & cubic-beziers stay as-is. */
+  .logo-spot {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: none;
+  }
+  .logo-spot.open {
+    display: block;
+  }
+  .logo-spot .ls-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 10, 10, 0.84);
+    opacity: 0;
+    transition: opacity 0.32s ease;
+    cursor: zoom-out;
+  }
+  .logo-spot.open .ls-backdrop {
+    opacity: 1;
+  }
+  .ls-fly {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 50px 100px -30px rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+    transition: top 0.42s cubic-bezier(0.4, 0, 0.2, 1), left 0.42s cubic-bezier(0.4, 0, 0.2, 1),
+      width 0.42s cubic-bezier(0.4, 0, 0.2, 1), height 0.42s cubic-bezier(0.4, 0, 0.2, 1),
+      padding 0.42s cubic-bezier(0.4, 0, 0.2, 1), border-radius 0.42s ease;
+    z-index: 201;
+  }
+  .ls-fly .ls-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    opacity: 0;
+    transition: opacity 0.25s ease 0.15s;
+    text-align: center;
+  }
+  .ls-fly.zoomed .ls-content {
+    opacity: 1;
+  }
+  .ls-fly img {
+    width: 92px;
+    height: 92px;
+    object-fit: contain;
+    display: block;
+  }
+  .ls-fly .ls-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+  }
+  .ls-fly .ls-visit {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--color-or);
+    padding: 12px 22px;
+    border-radius: 100px;
+    text-decoration: none;
+    transition: background 0.2s ease;
+  }
+  .ls-fly .ls-visit:hover {
+    background: var(--color-or-deep);
+  }
+  .ls-fly .ls-visit svg {
+    width: 14px;
+    height: 14px;
+  }
+  .ls-fly .ls-hint {
+    font-family: var(--font-display);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink-mute);
+  }
+
+  /* prefers-reduced-motion — freeze both marquees and the spotlight transition
+     (Story 5.5; Catalog.html ~621-623 & ~802-804, Catalog Mobile.html ~267). */
+  @media (prefers-reduced-motion: reduce) {
+    .catalog-dk .logo-track,
+    .catalog-dk .logo-track.rev,
+    .catalog-mb .logo-track,
+    .catalog-mb .logo-track.rev {
+      animation: none;
+    }
+    .ls-fly {
+      transition: none;
+    }
+  }
 }

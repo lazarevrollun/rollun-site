@@ -56,6 +56,29 @@ export type CatalogLine = {
   lineCta: { label: CatalogVariant; href: string }
 }
 
+/** One brand in the brands-wall marquee (05). `href` present → rendered as an
+ *  external `<a>` (Health line); absent → a no-href `.linkless <div>` (Automotive
+ *  line) that still opens a "Trusted partner brand" spotlight but never navigates.
+ *  Ported VERBATIM from the two prototypes. */
+export type CatalogBrand = { domain: string; name: string; href?: string }
+
+/** The "Brands we work with" marquee (05) — two seamless-loop lines. `autoRepeat`
+ *  / `healthRepeat` are the ×N tile duplication each track needs for a gap-free
+ *  `translateX(0 → -50%)` loop (auto 2 → 14×2=28, health 8 → 3×8=24), matching
+ *  BOTH prototypes (desktop markup + mobile `fill(auto,2)`/`fill(health,8)`).
+ *  `intro` is `{ dk, mb }` — the two prototypes phrase it differently. */
+export type CatalogBrandsWall = {
+  eyebrow: string
+  title: string
+  intro: CatalogVariant
+  autoCatLabel: string
+  healthCatLabel: string
+  auto: CatalogBrand[]
+  health: CatalogBrand[]
+  autoRepeat: number
+  healthRepeat: number
+}
+
 /** The full Catalog content contract — the page is a pure function of this. */
 export type CatalogContent = {
   hero: {
@@ -76,6 +99,7 @@ export type CatalogContent = {
     names: { auto: string; health: string }
   }
   lines: { auto: CatalogLine; health: CatalogLine }
+  brands: CatalogBrandsWall
   cta: {
     titleSegments: CatalogSegment[]
     text: string
@@ -209,6 +233,41 @@ export const catalogContent: CatalogContent = {
         href: '/shops#online',
       },
     },
+  },
+  brands: {
+    eyebrow: 'Trusted partners',
+    title: 'Brands we work with',
+    intro: {
+      dk: 'We distribute and resell products from established manufacturers across both of our product lines.',
+      mb: 'We distribute and resell products from established manufacturers across both product lines.',
+    },
+    autoCatLabel: 'Automotive & Motorcycle',
+    healthCatLabel: 'Health & Wellness',
+    // Automotive (14) — LINKLESS `<div>` tiles (no href, non-clickable cursor).
+    auto: [
+      { domain: 'dunlop.com', name: 'Dunlop' },
+      { domain: 'tuskoffroad.com', name: 'Tusk' },
+      { domain: 'motionpro.com', name: 'Motion Pro' },
+      { domain: 'kendatire.com', name: 'Kenda' },
+      { domain: 'barnettclutches.com', name: 'Barnett' },
+      { domain: 'ciro3d.com', name: 'Ciro' },
+      { domain: 'acerbis.com', name: 'Acerbis' },
+      { domain: 'irctire.com', name: 'IRC' },
+      { domain: 'sscycle.com', name: 'S&S Cycle' },
+      { domain: 'customdynamics.com', name: 'Custom Dynamics' },
+      { domain: 'yuasabatteries.com', name: 'Yuasa' },
+      { domain: 'caliberproducts.com', name: 'Caliber' },
+      { domain: 'unifilter.com', name: 'Unifilter' },
+      { domain: 'motul.com', name: 'Motul' },
+    ],
+    // Health (3) — LINKED external `<a>` tiles (target=_blank rel=noopener).
+    health: [
+      { domain: 'rynopower.com', name: 'Ryno Power', href: 'https://rynopower.com/' },
+      { domain: 'ridersgold.com', name: 'Riders Gold · Liquid Fuel', href: 'https://ridersgold.com/product/liquid-fuel/' },
+      { domain: 'ridersgold.com', name: 'Riders Gold · Full Throttle', href: 'https://ridersgold.com/product/full-throttle/' },
+    ],
+    autoRepeat: 2,
+    healthRepeat: 8,
   },
   cta: {
     titleSegments: [{ text: 'Ready to ' }, { text: 'buy', accent: true }, { text: '?' }],
