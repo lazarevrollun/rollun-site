@@ -101,7 +101,7 @@ development_status:
   # Epic 7: CMS — паспорт компании и управляемый контент страниц (Фаза 2)
   epic-7: backlog
   7-1-company-passport-sitesettings: done
-  7-2-media-collection-image-optimization: backlog
+  7-2-media-collection-image-optimization: done
   7-3-managed-page-content-globals: backlog
   7-4-on-demand-content-revalidation: backlog
   epic-7-retrospective: optional

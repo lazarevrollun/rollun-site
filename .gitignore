@@ -14,6 +14,10 @@ next-env.d.ts
 npm-debug.log*
 .DS_Store
 
+# Payload user uploads (Media staticDir) — keep the dir, ignore the files
+/public/media/*
+!/public/media/.gitkeep
+
 # Large binary archives (exceed GitHub 100MB limit) — keep out of git
 *.zip
 .bmad-loop/runs/

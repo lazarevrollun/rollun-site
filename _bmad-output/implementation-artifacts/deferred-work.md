@@ -125,3 +125,11 @@ Items surfaced incidentally during review, deferred for later focused attention.
 - source_spec: `_bmad-output/implementation-artifacts/spec-7-1-company-passport-sitesettings.md`
   summary: `map.initialSrc` (iframe Google Maps) в `src/content/contact.ts` зашивает адрес магазина литералом (`53%2F27…Houston…77039`) — дубликат паспорт-значения `shopAddress`, который не отследит правку в админке (на первом рендере карта покажет старый адрес до клика по табу).
   evidence: Ревью (Edge Case Hunter) на диффе 7.1. Намеренное AD-13-поведение (typo-then-correct) сохранено; сама дупликация адреса — второй дом. Вне scope 7.1 (контент карты страницы Contact → Story 7.3 Page Globals). Требует композиции `initialSrc` из `shopAddress` с сохранением namerennoгo `53%2F27`-typo.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-7-2-media-collection-image-optimization.md`
+  summary: Под `output:'standalone'` (Docker) `Media.upload.staticDir='public/media'` пишет на эфемерный контейнерный диск — без персистентного volume или cloud storage-адаптера (`@payloadcms/storage-*`) все загруженные менеджером картинки 404-ят после каждого редеплоя/рестарта.
+  evidence: Ревью (Edge Case Hunter) на диффе 7.2. Реально для прод-деплоя; фикс — инфраструктурный (volume-маунт на `/app/public/media` ИЛИ storage-адаптер S3/R2), решение о деплое, не unattended code-патч. Пересекается со Story 1.1 (deploy) и контуром ревалидации 7.4. Локально/в dev не проявляется (файлы на диске проекта).
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-7-2-media-collection-image-optimization.md`
+  summary: `next.config images.localPatterns:[{pathname:'/api/media/**'}]` работает, пока `Media.url` относительный; если Payload `serverURL`/`PAYLOAD_PUBLIC_SERVER_URL` будет задан (частая прод-настройка), `url` станет абсолютным → `next/image` отклонит незаданный хост (400), и понадобится `images.remotePatterns` под этот хост.
+  evidence: Ревью (Edge Case Hunter) на диффе 7.2. Сейчас `serverURL` не задан — проверено: media отдаётся `/_next/image` 200 webp по относительному пути. Латентная хрупкость, срабатывает при будущей смене конфигурации домена; логично закрыть вместе с деплой-настройкой (Story 1.1 / прод-конфиг).

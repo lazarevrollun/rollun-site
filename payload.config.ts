@@ -4,7 +4,9 @@ import { fileURLToPath } from 'url'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { buildConfig } from 'payload'
+import sharp from 'sharp'
 
+import { Media } from './src/collections/Media'
 import { Users } from './src/collections/Users'
 import { SiteSettings } from './src/globals/SiteSettings'
 
@@ -28,9 +30,11 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users],
+  collections: [Users, Media],
   globals: [SiteSettings],
   editor: lexicalEditor(),
+  // Required by Payload 3.x for upload image processing (imageSizes / focalPoint).
+  sharp,
   secret: PAYLOAD_SECRET,
   typescript: {
     outputFile: path.resolve(dirname, 'src/payload-types.ts'),
