@@ -1,0 +1,399 @@
+/*
+ * Contact section styles (Story 6.3) — imported by app/(site)/contact/page.tsx
+ * AFTER the layout's theme.css → components.css → shell.css, so DS tokens +
+ * global .btn / .reveal + Epic 2's `.cf-*`/`.contact-card` resolve first.
+ *
+ * TWO compositions live here for the Hero (01) and Map (03) sections, exactly
+ * like Shops/Brands (AD-3 / NFR-2): the desktop subtree (`.contact-dk`, ported
+ * from Contact.html) and the mobile subtree (`.contact-mb`, ported from Contact
+ * Mobile.html + mobile.css). Both SSR into one DOM; the visible one is chosen
+ * ONLY by the CSS `@media` at 768px below — desktop rules inside
+ * `(min-width:768px)`, mobile inside its exact complement
+ * `not all and (min-width:768px)` — so exactly one composition shows at EVERY
+ * width and the two never collide even though they reuse prototype class names.
+ * NO JS width-gating.
+ *
+ * EXCEPTION — the inline form/info card: `.contact-section` (the single mount of
+ * Epic 2's `ContactInline`) is NOT dk/mb-scoped. It shows on BOTH viewports and
+ * collapses to one column via the existing `.contact-card` rules in
+ * components.css; its rules live outside the media switch below.
+ *
+ * Values are ported VERBATIM from the prototypes (AD-13 > AD-2). Palette / fonts
+ * / gutters that exist as DS tokens are written through the token; prototype-only
+ * literals (shadows, all `rgba(255,255,255,…)`, `#fff`/`#ccc`) stay verbatim.
+ * `.btn` / `.reveal` / global tokens are NOT redefined.
+ *
+ * Root-node classes use COMPOUND selectors (`.contact-dk.page-hero`,
+ * `.contact-mb.section.paper`) NOT descendant combinators — otherwise a
+ * section-root rule would never match.
+ *
+ * Mobile map CSS note: Contact Mobile.html / mobile.css have NO `.map-tab`/
+ * `.map-frame` rules (only dead SVG-map code, unused by the markup). Per the
+ * spec's grounded decision, the mobile tabs/frame are styled from the desktop
+ * prototype's own narrow-viewport rules (Contact.html `@media(max-width:720px)`:
+ * full-width stacked tabs) reusing the desktop `.map-tab` look, plus a ~360px
+ * frame. No `.map-hint` element is added (not present in the rendered prototype).
+ */
+
+@layer components {
+  /* The single inline-form section — shown on BOTH viewports (not dk/mb). */
+  .contact-section {
+    padding: 90px 0;
+    background: var(--color-bg);
+  }
+  .contact-section .container {
+    max-width: var(--spacing-container);
+    margin: 0 auto;
+    padding: 0 var(--spacing-gutter);
+  }
+
+  /* Composition switch — both hidden by default; the media blocks reveal one. */
+  .contact-dk,
+  .contact-mb {
+    display: none;
+  }
+
+  /* ══════════════════════════  DESKTOP (≥768px)  ══════════════════════════ */
+  @media (min-width: 768px) {
+    .contact-dk {
+      display: block;
+    }
+
+    /* Heading + inline primitives (prototype global reset). */
+    .contact-dk h1,
+    .contact-dk h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      letter-spacing: -0.005em;
+      margin: 0;
+      line-height: 1.1;
+      color: var(--color-ink);
+    }
+    .contact-dk p {
+      margin: 0;
+    }
+    .contact-dk .container {
+      max-width: var(--spacing-container);
+      margin: 0 auto;
+      padding: 0 var(--spacing-gutter);
+    }
+
+    /* ─────────────  PAGE HERO (01)  ───────────── */
+    .contact-dk.page-hero {
+      background: var(--color-dark);
+      color: #fff;
+      padding: 170px 0 90px;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+    .contact-dk.page-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(1000px 500px at 50% 0%, rgba(239, 127, 26, 0.14), transparent 65%);
+      pointer-events: none;
+    }
+    .contact-dk.page-hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+    }
+    .contact-dk .page-hero-inner {
+      position: relative;
+      z-index: 2;
+    }
+    .contact-dk.page-hero .eyebrow {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--color-or);
+      margin-bottom: 18px;
+    }
+    .contact-dk.page-hero h1 {
+      color: #fff;
+      font-size: clamp(40px, 5.4vw, 72px);
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+    }
+    .contact-dk.page-hero p {
+      color: rgba(255, 255, 255, 0.72);
+      max-width: 600px;
+      margin: 0 auto;
+      font-size: 17px;
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    /* ─────────────  MAP (03)  ───────────── */
+    .contact-dk.map-section {
+      padding: 0 0 110px;
+      background: var(--color-bg);
+    }
+    .contact-dk .map-head {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .contact-dk .map-head .eyebrow {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--color-or);
+      margin-bottom: 12px;
+    }
+    .contact-dk .map-head h2 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: clamp(26px, 2.6vw, 36px);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .contact-dk .map-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 34px;
+      flex-wrap: wrap;
+    }
+    .contact-dk .map-tab {
+      background: #fff;
+      border: 1px solid var(--color-line);
+      padding: 20px 30px;
+      cursor: pointer;
+      text-align: left;
+      flex: 0 0 360px;
+      width: 360px;
+      transition: all 0.25s;
+      border-right: none;
+    }
+    .contact-dk .map-tab:last-child {
+      border-right: 1px solid var(--color-line);
+    }
+    .contact-dk .map-tab.active {
+      background: var(--color-dark);
+      border-color: var(--color-dark);
+    }
+    .contact-dk .map-tab .tab-label {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--color-or);
+      margin-bottom: 6px;
+    }
+    .contact-dk .map-tab .tab-addr {
+      font-size: 14.5px;
+      color: var(--color-ink-soft);
+      line-height: 1.4;
+    }
+    .contact-dk .map-tab.active .tab-addr {
+      color: rgba(255, 255, 255, 0.85);
+    }
+    .contact-dk .map-frame {
+      position: relative;
+      width: 100%;
+      height: 520px;
+      background: #ccc;
+      box-shadow: 0 30px 70px -40px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+    }
+    .contact-dk .map-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      filter: grayscale(0.25) contrast(1.05);
+    }
+  }
+
+  /* Desktop internal breakpoint (visible 768–980px band) — stack the inline
+     card, mirroring Contact.html's 980px query (`.contact-card` → 1 column).
+     `.contact-card` is the global Epic 2 class from components.css. */
+  @media (min-width: 768px) and (max-width: 980px) {
+    .contact-card {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ══════════════  MOBILE (<768px, exact complement of desktop)  ══════════ */
+  @media not all and (min-width: 768px) {
+    .contact-mb {
+      display: block;
+    }
+
+    .contact-mb h1,
+    .contact-mb h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      letter-spacing: -0.005em;
+      margin: 0;
+      line-height: 1.12;
+      color: var(--color-ink);
+    }
+    .contact-mb p {
+      margin: 0;
+    }
+    .contact-mb .wrap {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+
+    /* Section primitives (mobile.css). */
+    .contact-mb.section {
+      padding: 46px 0 50px;
+    }
+    .contact-mb.section.paper {
+      background: var(--color-paper);
+    }
+    .contact-mb .section-eyebrow {
+      font-family: var(--font-display);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-or);
+      margin-bottom: 10px;
+    }
+    .contact-mb .section-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 27px;
+      text-transform: uppercase;
+      letter-spacing: 0.01em;
+      line-height: 1.1;
+    }
+    .contact-mb .section-head {
+      margin-bottom: 26px;
+    }
+
+    /* ─────────────  PAGE HERO (01)  ───────────── */
+    .contact-mb.page-hero {
+      background: var(--color-dark);
+      color: #fff;
+      padding: 104px 22px 56px;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+    .contact-mb.page-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(700px 360px at 50% 0%, rgba(239, 127, 26, 0.16), transparent 65%);
+      pointer-events: none;
+    }
+    .contact-mb .page-hero-inner {
+      position: relative;
+      z-index: 2;
+    }
+    .contact-mb.page-hero .eyebrow {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-or);
+      margin-bottom: 14px;
+    }
+    .contact-mb.page-hero h1 {
+      color: #fff;
+      font-size: 42px;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      margin-bottom: 16px;
+      line-height: 1.06;
+    }
+    .contact-mb.page-hero p {
+      color: rgba(255, 255, 255, 0.74);
+      font-size: 15.5px;
+      font-weight: 300;
+      line-height: 1.6;
+      max-width: 360px;
+      margin: 0 auto;
+    }
+
+    /* ─────────────  MAP (03)  ─────────────
+       No mobile prototype CSS exists for the tabs/frame — ported from the
+       desktop prototype's own `@media(max-width:720px)` narrow rules (stacked
+       full-width tabs) reusing the desktop `.map-tab` look, plus a ~360px
+       frame. */
+    .contact-mb .map-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+    }
+    .contact-mb .map-tab {
+      background: #fff;
+      border: 1px solid var(--color-line);
+      border-bottom: none;
+      padding: 20px 30px;
+      cursor: pointer;
+      text-align: left;
+      width: 100%;
+      flex: none;
+      transition: all 0.25s;
+    }
+    .contact-mb .map-tab:not(:last-child) {
+      border-bottom: 1px solid var(--color-line);
+    }
+    .contact-mb .map-tab.active {
+      background: var(--color-dark);
+      border-color: var(--color-dark);
+    }
+    .contact-mb .map-tab .tab-label {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--color-or);
+      margin-bottom: 6px;
+    }
+    .contact-mb .map-tab .tab-addr {
+      font-size: 14.5px;
+      color: var(--color-ink-soft);
+      line-height: 1.4;
+    }
+    .contact-mb .map-tab.active .tab-addr {
+      color: rgba(255, 255, 255, 0.85);
+    }
+    .contact-mb .map-frame {
+      position: relative;
+      width: 100%;
+      height: 360px;
+      background: #ccc;
+      box-shadow: 0 30px 70px -40px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+    }
+    .contact-mb .map-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      filter: grayscale(0.25) contrast(1.05);
+    }
+
+    /* The single inline-form section on mobile — grounded in the mobile form
+       section `.section.bg` (mobile.css `.section { padding: 46px 0 50px }`) and
+       its `.wrap` 20px side gutter, so the card's gutters match the mobile hero
+       (22px) / map (20px) instead of the desktop 28px `--spacing-gutter`. */
+    .contact-section {
+      padding: 46px 0 50px;
+    }
+    .contact-section .container {
+      padding: 0 20px;
+    }
+  }
+}
