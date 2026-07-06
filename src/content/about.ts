@@ -73,6 +73,12 @@ export type AboutMapLocation = {
   suppliers?: AboutMapSupplier[]
 }
 
+/** A US-presence MOBILE location card (Story 4.3, static RSC list). FLAT
+ *  SERIALIZABLE DATA — its own curated shape (meta/place/addr), NOT a projection
+ *  of the desktop `locations` popovers. Ported VERBATIM from `About Us Mobile.html`.
+ *  `variant` `'hq'`/`'store'` drives the marker + left-border colour. */
+export type AboutPresenceCard = { variant: 'hq' | 'store'; meta: string; place: string; addr: string }
+
 /** The full About content contract — the page is a pure function of this. */
 export type AboutContent = {
   hero: {
@@ -124,6 +130,14 @@ export type AboutContent = {
     /** The desktop D3-map locations (Story 4.2): 30 warehouses, then hq, store —
      *  mirrors the prototype `LOCATIONS = [...WAREHOUSES, ...PRIMARY]` order. */
     locations: AboutMapLocation[]
+    /** The MOBILE static composition (Story 4.3): 2 location cards, 8 ship-from
+     *  city chips, and the live-network tag — its own curated content, NOT a
+     *  projection of `locations`. Ported VERBATIM from `About Us Mobile.html`. */
+    mobile: {
+      cards: AboutPresenceCard[]
+      chips: string[]
+      network: { label: string; count: number; unit: string }
+    }
   }
   team: {
     tilesDesktop: AboutTeamTile[]
@@ -609,6 +623,35 @@ export const aboutContent: AboutContent = {
         ],
       },
     ],
+    // Ported VERBATIM from `About Us Mobile.html` — its own curated mobile set
+    // (2 cards, 8 city chips, live network 9), NOT a projection of `locations`.
+    mobile: {
+      cards: [
+        {
+          variant: 'hq',
+          meta: 'Registered HQ',
+          place: 'Sheridan, Wyoming',
+          addr: '30 N Gould St STE 4370 · only for legal purposes',
+        },
+        {
+          variant: 'store',
+          meta: 'Brick store & return center',
+          place: 'Houston, Texas',
+          addr: '5327 Aldine Mail Route Rd, 77039',
+        },
+      ],
+      chips: [
+        'Seattle, WA',
+        'Los Angeles, CA',
+        'Denver, CO',
+        'Kansas City, MO',
+        'Chicago, IL',
+        'Atlanta, GA',
+        'New York, NY',
+        'Miami, FL',
+      ],
+      network: { label: 'Live network', count: 9, unit: 'shipping points' },
+    },
   },
   team: {
     tilesDesktop: [

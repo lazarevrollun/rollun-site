@@ -78,7 +78,7 @@ development_status:
   epic-4: backlog
   4-1-about-scaffold-composition-sections: done
   4-2-us-presence-d3-map-desktop: done
-  4-3-us-presence-static-list-mobile: backlog
+  4-3-us-presence-static-list-mobile: done
   4-4-automation-coin-tower-workforce: backlog
   epic-4-retrospective: optional
 

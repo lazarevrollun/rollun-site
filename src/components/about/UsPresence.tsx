@@ -12,7 +12,7 @@ import { Rich } from './Rich'
 import UsPresenceMap from './UsPresenceMap.client'
 
 export default function UsPresence({ usPresence }: { usPresence: AboutContent['usPresence'] }) {
-  const { eyebrowMobile, title, intro, liveCount, liveLabel, mapHint } = usPresence
+  const { eyebrowMobile, title, intro, liveCount, liveLabel, mapHint, mobile } = usPresence
   return (
     <>
       {/* ── Desktop composition — map shell (island mounts into #map in 4.2) ── */}
@@ -43,12 +43,37 @@ export default function UsPresence({ usPresence }: { usPresence: AboutContent['u
         </div>
       </section>
 
-      {/* ── Mobile composition — heading only (Story 4.3 fills the list) ── */}
+      {/* ── Mobile composition — static list / chips / live-tag (Story 4.3) ── */}
       <section className="about-mb section paper reveal">
         <div className="section-head wrap">
           <div className="section-eyebrow">{eyebrowMobile}</div>
           <h2 className="section-title">{title}</h2>
           <p>{intro.mb}</p>
+        </div>
+        <div className="wrap">
+          <div className="loc-list">
+            {mobile.cards.map((c) => (
+              <div key={c.variant} className={c.variant === 'store' ? 'loc-card store' : 'loc-card'}>
+                <div className={`loc-marker ${c.variant}`} />
+                <div>
+                  <div className="meta">{c.meta}</div>
+                  <div className="place">{c.place}</div>
+                  <div className="addr">{c.addr}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="ship-row">
+            {mobile.chips.map((c) => (
+              <span key={c} className="ship-chip">
+                {c}
+              </span>
+            ))}
+          </div>
+          <div className="live-tag">
+            <span className="dot" /> {mobile.network.label} · <span className="num">{mobile.network.count}</span>{' '}
+            {mobile.network.unit}
+          </div>
         </div>
       </section>
     </>

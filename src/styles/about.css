@@ -1640,6 +1640,123 @@
       align-self: flex-start;
     }
 
+    /* ─────────────  US PRESENCE (06)  ───────────── */
+    .about-mb .loc-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .about-mb .loc-card {
+      background: #fff;
+      border: 1px solid var(--color-line);
+      border-left: 3px solid var(--color-or);
+      padding: 16px 18px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+    .about-mb .loc-card.store {
+      border-left-color: var(--color-dark);
+    }
+    .about-mb .loc-marker {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex: none;
+      margin-top: 5px;
+    }
+    .about-mb .loc-marker.hq {
+      background: var(--color-or);
+      box-shadow: 0 0 0 3px rgba(239, 127, 26, 0.25);
+    }
+    .about-mb .loc-marker.store {
+      background: var(--color-dark);
+    }
+    .about-mb .loc-card .meta {
+      font-family: var(--font-display);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-ink-mute);
+      margin-bottom: 3px;
+      font-weight: 500;
+    }
+    .about-mb .loc-card .place {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 15px;
+    }
+    .about-mb .loc-card .addr {
+      font-size: 13px;
+      color: var(--color-ink-soft);
+      margin-top: 2px;
+    }
+    .about-mb .ship-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .about-mb .ship-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-family: var(--font-display);
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--color-ink-soft);
+      background: #fff;
+      border: 1px solid var(--color-line);
+      border-radius: 100px;
+      padding: 7px 13px;
+    }
+    .about-mb .ship-chip::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      border: 2px solid var(--color-or);
+    }
+    .about-mb .live-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      font-family: var(--font-display);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-ink-soft);
+      margin-top: 18px;
+    }
+    .about-mb .live-tag .dot {
+      width: 8px;
+      height: 8px;
+      background: #34c759;
+      border-radius: 50%;
+      animation: live 1.8s ease-out infinite;
+    }
+    .about-mb .live-tag .num {
+      color: var(--color-or);
+      font-weight: 700;
+    }
+    @keyframes live {
+      0% {
+        box-shadow: 0 0 0 0 rgba(52, 199, 89, 0.5);
+      }
+      70% {
+        box-shadow: 0 0 0 9px rgba(52, 199, 89, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(52, 199, 89, 0);
+      }
+    }
+    /* Epic mandate: reduced-motion disables all animation (prototype has none). */
+    @media (prefers-reduced-motion: reduce) {
+      .about-mb .live-tag .dot {
+        animation: none;
+      }
+    }
+
     /* ─────────────  TEAM (07)  ───────────── */
     .about-mb.team {
       background: var(--color-green);
