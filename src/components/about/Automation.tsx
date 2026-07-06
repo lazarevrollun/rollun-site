@@ -6,6 +6,7 @@
 // them without rewriting the DOM. No animation logic here.
 import type { AboutContent } from '@/content/about'
 
+import AutomationAnimations from './AutomationAnimations.client'
 import { Rich } from './Rich'
 
 export default function Automation({ automation }: { automation: AboutContent['automation'] }) {
@@ -25,14 +26,14 @@ export default function Automation({ automation }: { automation: AboutContent['a
             <div className="auto-stats">
               <div className="stat big">
                 <div className="stat-val">
-                  <span>{stats[0].display}</span>
+                  <span data-count={stats[0].value}>{stats[0].display}</span>
                   <span className="unit">{stats[0].unit}</span>
                 </div>
                 <div className="stat-lbl">{stats[0].label.dk}</div>
               </div>
               <div className="stat team-stat">
                 <div className="stat-val">
-                  <span>{stats[1].display}</span>
+                  <span data-count={stats[1].value}>{stats[1].display}</span>
                   <span className="unit">{stats[1].unit}</span>
                 </div>
                 <div className="people-circle" id="peopleRow" aria-hidden="true" />
@@ -40,7 +41,7 @@ export default function Automation({ automation }: { automation: AboutContent['a
               </div>
               <div className="stat coin-stat">
                 <div className="stat-val">
-                  <span>{stats[2].display}</span>
+                  <span data-count={stats[2].value}>{stats[2].display}</span>
                   <span className="unit">{stats[2].unit}</span>
                 </div>
                 <div className="coin-tower" id="coinTower" aria-hidden="true" />
@@ -62,21 +63,21 @@ export default function Automation({ automation }: { automation: AboutContent['a
           <div className="auto-stats">
             <div className="astat big">
               <div className="v">
-                <span>{stats[0].display}</span>
+                <span data-count={stats[0].value}>{stats[0].display}</span>
                 <span className="unit">{stats[0].unit}</span>
               </div>
               <div className="l">{stats[0].label.mb}</div>
             </div>
             <div className="astat">
               <div className="v">
-                <span>{stats[1].display}</span>
+                <span data-count={stats[1].value}>{stats[1].display}</span>
                 <span className="unit">{stats[1].unit}</span>
               </div>
               <div className="l">{stats[1].label.mb}</div>
             </div>
             <div className="astat">
               <div className="v">
-                <span>{stats[2].display}</span>
+                <span data-count={stats[2].value}>{stats[2].display}</span>
                 <span className="unit">{stats[2].unit}</span>
               </div>
               <div className="l">{stats[2].label.mb}</div>
@@ -85,6 +86,8 @@ export default function Automation({ automation }: { automation: AboutContent['a
           </div>
         </div>
       </section>
+
+      <AutomationAnimations />
     </>
   )
 }
