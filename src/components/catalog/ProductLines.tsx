@@ -25,6 +25,8 @@ import { buildOffers } from '@/lib/offers'
 import CatalogCardSlider from './CatalogCardSlider.client'
 import CatalogLineSwitcher from './CatalogLineSwitcher.client'
 import ProductCard from './ProductCard'
+import ProductQuickView from './ProductQuickView.client'
+import type { ProductDetail } from './ProductQuickView.client'
 
 /** The → arrow glyph on the line CTAs (both prototypes, stroke-width 2). */
 function LineArrow() {
@@ -173,6 +175,26 @@ export default function ProductLines({
   // `.filter(Boolean)` mirrors the prototype's `if (PRODUCTS[c] && PRODUCTS[c][0])`
   // guard: an empty category is skipped rather than crashing the RSC render.
   const autoRepresentatives = [products.tires[0], products.oils[0], products.elec[0]].filter(Boolean)
+
+  // Story 5.4 — build the quick-view payload for ALL products (12 unique), deriving
+  // offers SERVER-side per line (AD-9 — `buildOffers` is a server-only module; the
+  // client island receives only ready, flat `Offer[]`). `key` matches each card's
+  // `data-pd-key` (`${brand} ${name}`), unique across every product.
+  const allDetails: ProductDetail[] = (Object.keys(products) as ProductCategory[]).flatMap((cat) =>
+    products[cat].map((p) => ({
+      key: `${p.brand} ${p.name}`,
+      brand: p.brand,
+      domain: p.domain,
+      name: p.name,
+      imgs: p.imgs,
+      rating: p.rating,
+      reviews: p.reviews,
+      specs: p.specs,
+      fits: p.fits,
+      desc: p.desc,
+      offers: buildOffers(p, cat === 'health' ? 'health' : 'auto'),
+    })),
+  )
   return (
     <>
       {/* ── Desktop composition — hidden until the island adds `.active` ── */}
@@ -205,6 +227,10 @@ export default function ProductLines({
 
       {/* Leaf 'use client' island — enhances every card's slider. Renders null. */}
       <CatalogCardSlider />
+
+      {/* Story 5.4 — leaf 'use client' island: enhances every card's click/Enter/Space to
+          open the quick-view. Renders BOTH modal compositions (AD-3), driven by one state. */}
+      <ProductQuickView details={allDetails} />
     </>
   )
 }

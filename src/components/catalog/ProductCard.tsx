@@ -9,8 +9,9 @@
 // (no arrows + bare `pc-badge`, green baked into the mobile CSS).
 //
 // The card carries `role="button"` / `tabIndex` / `aria-label` + focus-ring for
-// pixel/DOM fidelity, but NO activating handler — the quick-view `openDetail`
-// (click / Enter / Space) is Story 5.4. Marketplace chips are the first two
+// pixel/DOM fidelity. The quick-view `openDetail` activation (click / Enter / Space)
+// is implemented in Story 5.4 by the `ProductQuickView` island, which ENHANCES this
+// card by reading its `data-pd-key` (`${brand} ${name}`). Marketplace chips are the first two
 // runtime-derived `offers` (Story 5.3 — invariantly Amazon + eBay for both lines;
 // Walmart is the 3rd auto offer, sliced off). Offers are computed SERVER-side in
 // `ProductLines` via `buildOffers` and handed here as a ready `offers` prop; this
@@ -63,7 +64,7 @@ function ImgIco() {
 export default function ProductCard({ product, variant, offers }: { product: Product; variant: 'dk' | 'mb'; offers: Offer[] }) {
   const { brand, domain, name, imgs, specs } = product
   return (
-    <div className="product-card" role="button" tabIndex={0} aria-label={`${brand} ${name}`}>
+    <div className="product-card" role="button" tabIndex={0} aria-label={`${brand} ${name}`} data-pd-key={`${brand} ${name}`}>
       <div className="pc-media">
         <div className="pc-track">
           {imgs.map((_, idx) => (

@@ -1224,6 +1224,370 @@
       width: 14px;
       height: 14px;
     }
+
+    /* ═══════════  Story 5.4 — PRODUCT DETAIL MODAL (desktop)  ═══════════ */
+    /* Ported VERBATIM from Catalog.html <style> (~lines 447-563), scoped to
+       `.catalog-dk`. Raw prototype vars → DS tokens; Poppins → `--font-display`;
+       rgba shadows/backdrops, px, transitions & cubic-beziers stay literal. */
+    .catalog-dk .pd-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 220;
+      display: none;
+    }
+    .catalog-dk .pd-modal.open {
+      display: block;
+    }
+    .catalog-dk .pd-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(10, 10, 10, 0.78);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      cursor: zoom-out;
+    }
+    .catalog-dk .pd-modal.open .pd-backdrop {
+      opacity: 1;
+    }
+    .catalog-dk .pd-panel {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.94);
+      opacity: 0;
+      width: min(1000px, calc(100vw - 48px));
+      max-height: calc(100vh - 56px);
+      overflow: hidden;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 50px 120px -30px rgba(0, 0, 0, 0.7);
+      transition: transform 0.34s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.34s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .catalog-dk .pd-modal.open .pd-panel {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+    .catalog-dk .pd-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 4;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--color-line);
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .catalog-dk .pd-close:hover {
+      background: #fff;
+    }
+    .catalog-dk .pd-close svg {
+      width: 18px;
+      height: 18px;
+      color: var(--color-ink);
+    }
+    .catalog-dk .pd-scroll {
+      overflow-y: auto;
+    }
+    .catalog-dk .pd-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .catalog-dk .pd-gallery {
+      padding: 30px;
+      border-right: 1px solid var(--color-line);
+      background: var(--color-paper);
+    }
+    .catalog-dk .pd-main {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      background: #fff;
+      border: 1px solid var(--color-line);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+    .catalog-dk .pd-main img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .catalog-dk .pd-ph-main {
+      font-size: 0;
+    }
+    .catalog-dk .pd-ph-main svg {
+      width: 56px;
+      height: 56px;
+      opacity: 0.45;
+    }
+    .catalog-dk .pd-ph-main .pl {
+      font-size: 13px;
+      letter-spacing: 0.14em;
+    }
+    .catalog-dk .pd-ph-main .sub {
+      font-family: var(--font-display);
+      font-size: 11px;
+      opacity: 0.75;
+      letter-spacing: 0.04em;
+      text-transform: none;
+    }
+    .catalog-dk .pd-ph-mini svg {
+      width: 20px;
+      height: 20px;
+    }
+    .catalog-dk .pd-ph-mini .pl {
+      font-size: 11px;
+      letter-spacing: 0.04em;
+    }
+    .catalog-dk .pd-thumbs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .catalog-dk .pd-thumb {
+      width: 64px;
+      height: 64px;
+      border-radius: 9px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      cursor: pointer;
+      background: #fff;
+      transition: border-color 0.2s ease;
+      padding: 0;
+    }
+    .catalog-dk .pd-thumb.active {
+      border-color: var(--color-or);
+    }
+    .catalog-dk .pd-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .catalog-dk .pd-info {
+      padding: 34px 34px 30px;
+      display: flex;
+      flex-direction: column;
+    }
+    .catalog-dk .pd-brand-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 12px;
+    }
+    .catalog-dk .pd-brand-row img {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+    .catalog-dk .pd-brand-row .b {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-or-deep);
+    }
+    .catalog-dk .pd-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 25px;
+      line-height: 1.18;
+      color: var(--color-ink);
+      margin-bottom: 12px;
+      text-wrap: balance;
+    }
+    .catalog-dk .pd-rating {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .catalog-dk .pd-stars {
+      display: inline-flex;
+      gap: 2px;
+    }
+    .catalog-dk .pd-stars svg {
+      width: 16px;
+      height: 16px;
+    }
+    .catalog-dk .pd-stars .on {
+      color: var(--color-or);
+      fill: var(--color-or);
+    }
+    .catalog-dk .pd-stars .off {
+      color: #ccc;
+      fill: #e0e0e0;
+    }
+    .catalog-dk .pd-rating .rv {
+      font-size: 13px;
+      color: var(--color-ink-mute);
+      font-family: var(--font-display);
+    }
+    .catalog-dk .pd-stockline {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      align-self: flex-start;
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--color-green);
+      margin-bottom: 20px;
+    }
+    .catalog-dk .pd-stockline::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--color-green);
+    }
+    .catalog-dk .pd-section-h {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--color-ink-mute);
+      margin: 6px 0 12px;
+    }
+    .catalog-dk .pd-specs {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 22px;
+    }
+    .catalog-dk .pd-specs li {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--color-line);
+      font-size: 14px;
+    }
+    .catalog-dk .pd-specs li:last-child {
+      border-bottom: none;
+    }
+    .catalog-dk .pd-specs .k {
+      color: var(--color-ink-mute);
+    }
+    .catalog-dk .pd-specs .v {
+      color: var(--color-ink);
+      font-weight: 500;
+      text-align: right;
+    }
+    .catalog-dk .pd-fits {
+      background: var(--color-bg);
+      border: 1px solid var(--color-line);
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-bottom: 24px;
+    }
+    .catalog-dk .pd-fits ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .catalog-dk .pd-fits li {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 13.5px;
+      color: var(--color-ink);
+    }
+    .catalog-dk .pd-fits li svg {
+      width: 15px;
+      height: 15px;
+      color: var(--color-green);
+      flex: none;
+    }
+    .catalog-dk .pd-offers {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: auto;
+    }
+    .catalog-dk .pd-offer {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border: 1px solid var(--color-line);
+      border-radius: 12px;
+      padding: 13px 14px;
+      text-decoration: none;
+      color: var(--color-ink);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    .catalog-dk .pd-offer:hover {
+      border-color: var(--color-or);
+      box-shadow: 0 10px 26px -18px rgba(0, 0, 0, 0.4);
+      transform: translateY(-1px);
+    }
+    .catalog-dk .pd-offer .mk-logo {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+      border-radius: 6px;
+      flex: none;
+    }
+    .catalog-dk .pd-offer .mk-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+    }
+    .catalog-dk .pd-offer .mk-name {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .catalog-dk .pd-offer .mk-sub {
+      font-size: 12px;
+      color: var(--color-ink-mute);
+    }
+    .catalog-dk .pd-offer .mk-price {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 17px;
+      color: var(--color-ink);
+    }
+    .catalog-dk .pd-offer .mk-go {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-or-deep);
+    }
+    .catalog-dk .pd-offer .mk-go svg {
+      width: 13px;
+      height: 13px;
+    }
+    .catalog-dk .pd-disc {
+      font-size: 11.5px;
+      color: var(--color-ink-mute);
+      margin-top: 14px;
+      line-height: 1.5;
+    }
+    /* NOTE: the prototype's `@media (max-width:760px)` sub-rule (collapse `.pd-grid`
+       to 1 col) is INTENTIONALLY OMITTED — `.catalog-dk` only renders ≥768px, so that
+       rule is dead here; the mobile bottom-sheet composition covers <768px instead. */
   }
 
   /* ═══════════════  MOBILE product card + slider (<768px)  ═══════════════ */
@@ -1462,6 +1826,353 @@
     .catalog-mb .pc-cta svg {
       width: 14px;
       height: 14px;
+    }
+
+    /* ═══════════  Story 5.4 — PRODUCT DETAIL bottom-sheet (mobile)  ═══════════ */
+    /* Ported VERBATIM from Catalog Mobile.html <style> (~lines 297-360), scoped to
+       `.catalog-mb`. Raw prototype vars → DS tokens; Poppins → `--font-display`;
+       `--shell-w` left as-is (theme surface var); literal rgba/px/transitions stay. */
+    .catalog-mb .pd-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      display: none;
+    }
+    .catalog-mb .pd-modal.open {
+      display: block;
+    }
+    .catalog-mb .pd-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(10, 10, 10, 0.6);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .catalog-mb .pd-modal.open .pd-backdrop {
+      opacity: 1;
+    }
+    .catalog-mb .pd-sheet {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%) translateY(100%);
+      width: 100%;
+      max-width: var(--shell-w);
+      height: 92%;
+      background: #fff;
+      border-radius: 22px 22px 0 0;
+      overflow: hidden;
+      box-shadow: 0 -20px 60px -20px rgba(0, 0, 0, 0.5);
+      transition: transform 0.38s cubic-bezier(0.2, 0.8, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+    }
+    .catalog-mb .pd-modal.open .pd-sheet {
+      transform: translateX(-50%) translateY(0);
+    }
+    .catalog-mb .pd-grab {
+      display: flex;
+      justify-content: center;
+      padding: 10px 0 4px;
+      flex: none;
+    }
+    .catalog-mb .pd-grab span {
+      width: 42px;
+      height: 5px;
+      border-radius: 3px;
+      background: rgba(0, 0, 0, 0.16);
+    }
+    .catalog-mb .pd-close {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      z-index: 4;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--color-line);
+      cursor: pointer;
+    }
+    .catalog-mb .pd-close svg {
+      width: 18px;
+      height: 18px;
+      color: var(--color-ink);
+    }
+    .catalog-mb .pd-scroll {
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .catalog-mb .pd-gallery {
+      padding: 8px 18px 18px;
+      background: var(--color-paper);
+    }
+    .catalog-mb .pd-main {
+      position: relative;
+      aspect-ratio: 1/1;
+      background: #fff;
+      border: 1px solid var(--color-line);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .catalog-mb .pd-ph-main svg {
+      width: 48px;
+      height: 48px;
+      opacity: 0.45;
+    }
+    .catalog-mb .pd-ph-main .pl {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+    }
+    .catalog-mb .pd-ph-main .sub {
+      font-family: var(--font-display);
+      font-size: 11px;
+      opacity: 0.75;
+      letter-spacing: 0.04em;
+      text-transform: none;
+    }
+    .catalog-mb .pd-thumbs {
+      display: flex;
+      gap: 9px;
+    }
+    .catalog-mb .pd-thumb {
+      width: 58px;
+      height: 58px;
+      border-radius: 9px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      cursor: pointer;
+      background: #fff;
+      padding: 0;
+    }
+    .catalog-mb .pd-thumb.active {
+      border-color: var(--color-or);
+    }
+    .catalog-mb .pd-ph-mini svg {
+      width: 18px;
+      height: 18px;
+    }
+    .catalog-mb .pd-ph-mini .pl {
+      font-size: 11px;
+    }
+    .catalog-mb .pd-info {
+      padding: 22px 20px 30px;
+      display: flex;
+      flex-direction: column;
+    }
+    .catalog-mb .pd-brand-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 11px;
+    }
+    .catalog-mb .pd-brand-row img {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+    .catalog-mb .pd-brand-row .b {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-or-deep);
+    }
+    .catalog-mb .pd-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 22px;
+      line-height: 1.2;
+      color: var(--color-ink);
+      margin-bottom: 11px;
+      text-wrap: balance;
+    }
+    .catalog-mb .pd-rating {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 14px;
+    }
+    .catalog-mb .pd-stars {
+      display: inline-flex;
+      gap: 2px;
+    }
+    .catalog-mb .pd-stars svg {
+      width: 15px;
+      height: 15px;
+    }
+    .catalog-mb .pd-stars .on {
+      color: var(--color-or);
+      fill: var(--color-or);
+    }
+    .catalog-mb .pd-stars .off {
+      color: #ccc;
+      fill: #e0e0e0;
+    }
+    .catalog-mb .pd-rating .rv {
+      font-size: 12.5px;
+      color: var(--color-ink-mute);
+      font-family: var(--font-display);
+    }
+    .catalog-mb .pd-stockline {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      align-self: flex-start;
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: var(--color-green);
+      margin-bottom: 18px;
+    }
+    .catalog-mb .pd-stockline::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--color-green);
+    }
+    .catalog-mb .pd-desc {
+      color: var(--color-ink-soft);
+      font-size: 14.5px;
+      line-height: 1.6;
+      margin: 0 0 22px;
+    }
+    .catalog-mb .pd-section-h {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--color-ink-mute);
+      margin: 6px 0 11px;
+    }
+    .catalog-mb .pd-specs {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 22px;
+    }
+    .catalog-mb .pd-specs li {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--color-line);
+      font-size: 13.5px;
+    }
+    .catalog-mb .pd-specs li:last-child {
+      border-bottom: none;
+    }
+    .catalog-mb .pd-specs .k {
+      color: var(--color-ink-mute);
+    }
+    .catalog-mb .pd-specs .v {
+      color: var(--color-ink);
+      font-weight: 500;
+      text-align: right;
+    }
+    .catalog-mb .pd-fits {
+      background: var(--color-bg);
+      border: 1px solid var(--color-line);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 24px;
+    }
+    .catalog-mb .pd-fits ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .catalog-mb .pd-fits li {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 13px;
+      color: var(--color-ink);
+    }
+    .catalog-mb .pd-fits li svg {
+      width: 15px;
+      height: 15px;
+      color: var(--color-green);
+      flex: none;
+    }
+    .catalog-mb .pd-offers {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .catalog-mb .pd-offer {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid var(--color-line);
+      border-radius: 12px;
+      padding: 13px 14px;
+      text-decoration: none;
+      color: var(--color-ink);
+    }
+    .catalog-mb .pd-offer:active {
+      border-color: var(--color-or);
+    }
+    .catalog-mb .pd-offer .mk-logo {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+      border-radius: 6px;
+      flex: none;
+    }
+    .catalog-mb .pd-offer .mk-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+    }
+    .catalog-mb .pd-offer .mk-name {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .catalog-mb .pd-offer .mk-sub {
+      font-size: 11.5px;
+      color: var(--color-ink-mute);
+    }
+    .catalog-mb .pd-offer .mk-price {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--color-ink);
+    }
+    .catalog-mb .pd-offer .mk-go {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 10.5px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--color-or-deep);
+    }
+    .catalog-mb .pd-offer .mk-go svg {
+      width: 12px;
+      height: 12px;
+    }
+    .catalog-mb .pd-disc {
+      font-size: 11px;
+      color: var(--color-ink-mute);
+      margin-top: 16px;
+      line-height: 1.5;
     }
   }
 }
