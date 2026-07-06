@@ -33,13 +33,13 @@ export default function CatalogLineSwitcher({ names }: { names: { auto: string; 
 
   useEffect(() => {
     // Enhance-only — query the static desktop frame; never create/rewrite it.
-    const section = document.querySelector<HTMLElement>('.catalog-dk .lines-split')
+    const section = document.querySelector<HTMLElement>('.catalog-dk.lines-split')
     if (!section) return
     const grid = section.querySelector<HTMLElement>('.split-grid')
     if (!grid) return
     const nameEl = section.querySelector<HTMLElement>('.cat-filter-name')
     const backBtn = section.querySelector<HTMLElement>('.cat-back')
-    const entranceSection = document.querySelector<HTMLElement>('.catalog-dk .entrances')
+    const entranceSection = document.querySelector<HTMLElement>('.catalog-dk.entrances')
     const entrances = Array.from(document.querySelectorAll<HTMLElement>('.catalog-dk .entrance'))
 
     const cleanups: Array<() => void> = []
