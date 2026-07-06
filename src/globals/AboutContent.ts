@@ -1,5 +1,8 @@
 import type { GlobalConfig } from 'payload'
 
+import { ABOUT_CONTENT_TAG } from '../lib/cache-tags'
+import { revalidateGlobal } from '../hooks/revalidate-global'
+
 /**
  * AboutContent — managed 🟡 editable TEXT and the 🔴 flat CEO photo of the About
  * page (`/about`). Story 7.3 moves these slot values out of the static
@@ -21,6 +24,9 @@ export const AboutContent: GlobalConfig = {
   label: 'About Content',
   admin: {
     group: 'Content Pages',
+  },
+  hooks: {
+    afterChange: [revalidateGlobal(ABOUT_CONTENT_TAG)],
   },
   fields: [
     {

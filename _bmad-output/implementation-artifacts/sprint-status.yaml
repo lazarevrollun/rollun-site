@@ -103,7 +103,7 @@ development_status:
   7-1-company-passport-sitesettings: done
   7-2-media-collection-image-optimization: done
   7-3-managed-page-content-globals: done
-  7-4-on-demand-content-revalidation: backlog
+  7-4-on-demand-content-revalidation: done
   epic-7-retrospective: optional
 
   # Epic 8: CMS — каталожные данные из CMS и роли (Фаза 3)

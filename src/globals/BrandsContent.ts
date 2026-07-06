@@ -1,5 +1,8 @@
 import type { GlobalConfig } from 'payload'
 
+import { BRANDS_CONTENT_TAG } from '../lib/cache-tags'
+import { revalidateGlobal } from '../hooks/revalidate-global'
+
 /**
  * BrandsContent — managed 🟡 editable TEXT and the 🔴 flat product/trademark
  * images of the Our Brands page (`/brands`, the OWN-brand MOTOTOU showcase — NOT
@@ -22,6 +25,9 @@ export const BrandsContent: GlobalConfig = {
   label: 'Brands Content',
   admin: {
     group: 'Content Pages',
+  },
+  hooks: {
+    afterChange: [revalidateGlobal(BRANDS_CONTENT_TAG)],
   },
   fields: [
     {

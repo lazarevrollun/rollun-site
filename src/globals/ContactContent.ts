@@ -1,5 +1,8 @@
 import type { GlobalConfig } from 'payload'
 
+import { CONTACT_CONTENT_TAG } from '../lib/cache-tags'
+import { revalidateGlobal } from '../hooks/revalidate-global'
+
 /**
  * ContactContent — managed 🟡 editable TEXT of the Contact page (`/contact`) Hero
  * (01) and Map (03) section headings. Story 7.3 moves these slot values out of
@@ -17,6 +20,9 @@ export const ContactContent: GlobalConfig = {
   label: 'Contact Content',
   admin: {
     group: 'Content Pages',
+  },
+  hooks: {
+    afterChange: [revalidateGlobal(CONTACT_CONTENT_TAG)],
   },
   fields: [
     {

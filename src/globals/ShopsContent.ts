@@ -1,5 +1,8 @@
 import type { GlobalConfig } from 'payload'
 
+import { SHOPS_CONTENT_TAG } from '../lib/cache-tags'
+import { revalidateGlobal } from '../hooks/revalidate-global'
+
 /**
  * ShopsContent — managed 🟡 editable TEXT and the 🔴 flat storefront photo of the
  * Our Shops page (`/shops`). Story 7.3 moves these slot values out of the
@@ -20,6 +23,9 @@ export const ShopsContent: GlobalConfig = {
   label: 'Shops Content',
   admin: {
     group: 'Content Pages',
+  },
+  hooks: {
+    afterChange: [revalidateGlobal(SHOPS_CONTENT_TAG)],
   },
   fields: [
     {

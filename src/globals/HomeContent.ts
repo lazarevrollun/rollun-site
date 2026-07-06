@@ -1,5 +1,8 @@
 import type { GlobalConfig } from 'payload'
 
+import { HOME_CONTENT_TAG } from '../lib/cache-tags'
+import { revalidateGlobal } from '../hooks/revalidate-global'
+
 /**
  * HomeContent — the managed-content home for the 🟡 editable live-block TEXT of
  * the Home page (`/`). Story 7.3 moves these slot values out of the static
@@ -21,6 +24,9 @@ export const HomeContent: GlobalConfig = {
   label: 'Home Content',
   admin: {
     group: 'Content Pages',
+  },
+  hooks: {
+    afterChange: [revalidateGlobal(HOME_CONTENT_TAG)],
   },
   fields: [
     {

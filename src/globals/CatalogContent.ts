@@ -1,5 +1,8 @@
 import type { GlobalConfig } from 'payload'
 
+import { CATALOG_CONTENT_TAG } from '../lib/cache-tags'
+import { revalidateGlobal } from '../hooks/revalidate-global'
+
 /**
  * CatalogContent — managed 🟡 editable TEXT and the two 🔴 flat entrance images
  * of the Catalog page (`/catalog`). Story 7.3 moves these slot values out of the
@@ -20,6 +23,9 @@ export const CatalogContent: GlobalConfig = {
   label: 'Catalog Content',
   admin: {
     group: 'Content Pages',
+  },
+  hooks: {
+    afterChange: [revalidateGlobal(CATALOG_CONTENT_TAG)],
   },
   fields: [
     {

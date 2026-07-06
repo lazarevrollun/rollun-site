@@ -1,5 +1,8 @@
 import type { GlobalConfig } from 'payload'
 
+import { SITE_SETTINGS_TAG } from '../lib/cache-tags'
+import { revalidateGlobal } from '../hooks/revalidate-global'
+
 /**
  * SiteSettings — the SINGLE home (AD-14) of every company-passport atom: phones,
  * emails, social links, the two physical addresses, and the various opening-hours
@@ -24,6 +27,9 @@ export const SiteSettings: GlobalConfig = {
   label: 'Site Settings',
   admin: {
     group: 'Company',
+  },
+  hooks: {
+    afterChange: [revalidateGlobal(SITE_SETTINGS_TAG)],
   },
   fields: [
     {
