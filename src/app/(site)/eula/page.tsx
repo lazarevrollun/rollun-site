@@ -14,7 +14,7 @@ const CONTACT_EMAIL = 'support@rollun.net'
 
 export default function EulaPage() {
   return (
-    <main style={{ maxWidth: 820, margin: '0 auto', padding: '64px 24px', lineHeight: 1.65 }}>
+    <main style={{ maxWidth: 820, margin: '0 auto', padding: '130px 24px 64px', lineHeight: 1.65 }}>
       <h1>End-User License Agreement</h1>
       <p>
         <em>Last updated: {LAST_UPDATED}</em>
