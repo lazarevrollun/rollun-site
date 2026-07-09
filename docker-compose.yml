@@ -58,6 +58,11 @@ services:
       PAYLOAD_SECRET: ${PAYLOAD_SECRET:-local-dev-secret-change-me}
       CRM_API_URL: ${CRM_API_URL:-https://crm.example.com/api}
       REVALIDATION_SECRET: ${REVALIDATION_SECRET:-local-revalidation-secret}
+      # QuickBooks Online OAuth (token-minting flow). Blank by default locally.
+      QUICKBOOKS_CLIENT_ID: ${QUICKBOOKS_CLIENT_ID:-}
+      QUICKBOOKS_CLIENT_SECRET: ${QUICKBOOKS_CLIENT_SECRET:-}
+      QUICKBOOKS_REDIRECT_URI: ${QUICKBOOKS_REDIRECT_URI:-https://com.rollun.org/quickbooks/callback}
+      QUICKBOOKS_CONNECT_SECRET: ${QUICKBOOKS_CONNECT_SECRET:-}
     ports:
       - "3000:3000"
 
