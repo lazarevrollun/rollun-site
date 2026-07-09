@@ -11,7 +11,8 @@
 // so random visitors cannot initiate a handshake against our Intuit app.
 import { NextResponse, type NextRequest } from 'next/server'
 
-export const dynamic = 'force-dynamic'
+// No `export const dynamic` — incompatible with cacheComponents. Reading request
+// searchParams below makes this handler dynamic automatically.
 
 const AUTHORIZE_URL = 'https://appcenter.intuit.com/connect/oauth2'
 // Read-only posture is enforced by the MCP server flags; OAuth still needs the full

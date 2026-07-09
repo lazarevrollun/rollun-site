@@ -8,7 +8,8 @@
 // (manual rotation, by design) — re-run /quickbooks/connect before it lapses.
 import { NextResponse, type NextRequest } from 'next/server'
 
-export const dynamic = 'force-dynamic'
+// No `export const dynamic` — incompatible with cacheComponents. Reading request
+// searchParams below makes this handler dynamic automatically.
 
 // OAuth token endpoint is the same for sandbox and production.
 const TOKEN_URL = 'https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer'
