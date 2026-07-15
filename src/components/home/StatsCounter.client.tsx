@@ -15,18 +15,23 @@
  * suffix`, driven by `requestAnimationFrame`. `data-final` / `data-suffix` /
  * `data-format` are read straight off the SSR markup — the island never guesses.
  *
- * When motion is allowed AND `IntersectionObserver` exists, the island resets
- * every `.stats .stat-value` to `0` on mount (like `HeroMosaic` mutes its tiles),
- * then the observer counts each element up to its target when it scrolls into
- * view (AC: "before the trigger the final value is not shown"). The Stats section
- * sits below the fold, so the brief SSR-final → `0` swap is never seen. Both
- * compositions (`.home-dk` / `.home-mb`) share one DOM; the hidden one never
- * intersects and simply stays at `0` until a 768px resize makes it visible, at
- * which point it counts up on its own — self-healing, exactly as in the prototype.
+ * When motion is allowed the island resets every `.stats .stat-value` to `0` on
+ * mount (like `HeroMosaic` mutes its tiles), then counts each element up to its
+ * target when it scrolls into view (AC: "before the trigger the final value is
+ * not shown"). The Stats section sits below the fold, so the brief SSR-final → `0`
+ * swap is never seen. Both compositions (`.home-dk` / `.home-mb`) share one DOM;
+ * the hidden one (`offsetParent === null`) is skipped and simply stays at `0`
+ * until a 768px resize lays it out, at which point the resize handler counts it up.
  *
- * If `prefers-reduced-motion: reduce` OR there is no `IntersectionObserver`, the
- * island does NOTHING (no reset, no animation) so the SSR final frame is shown
- * immediately — double protection alongside the no-JS case.
+ * The trigger is DELIBERATELY belt-and-braces: an `IntersectionObserver` is the
+ * primary path, but it can miss (iOS Safari quirks; the section already in view at
+ * mount after an SPA nav), which used to leave the counters frozen at `0`. So a
+ * geometry check also runs on mount and on every passive scroll/resize; whichever
+ * fires first wins and a `data-done` flag keeps each count-up single-shot. The
+ * numbers can therefore never get stuck at `0` while motion is allowed.
+ *
+ * If `prefers-reduced-motion: reduce`, the island does NOTHING (no reset, no
+ * animation) so the SSR final frame is shown immediately — the no-JS fallback too.
  *
  * The effect is keyed on `usePathname()` (like the sibling islands) and its
  * cleanup disconnects the observer — so SPA navigation leaves nothing running.
@@ -44,13 +49,13 @@ export default function StatsCounter() {
   const pathname = usePathname()
 
   useEffect(() => {
-    // Reduced motion OR no IntersectionObserver → do nothing so the SSR final
-    // frame stays visible (matches `Home.html:1378` guard + reduced-motion rule).
+    // Reduced motion → do nothing so the SSR final frame stays visible (matches
+    // `Home.html:1378` guard + the reduced-motion rule). Everything else counts up;
+    // a missing IntersectionObserver is fine — the scroll fallback below covers it.
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    if (!('IntersectionObserver' in window)) return
 
-    // Reset each counter to `0` (below the fold — never seen), then count up on
-    // intersection. Both compositions are queried; the hidden one stays at `0`.
+    // Reset each counter to `0` (below the fold — never seen), then count up when
+    // it enters view. Both compositions are queried; the hidden one stays at `0`.
     const values = Array.from(
       document.querySelectorAll<HTMLElement>('.stats .stat-value'),
     )
@@ -83,24 +88,50 @@ export default function StatsCounter() {
       frames.add(requestAnimationFrame(tick))
     }
 
-    const io = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((e) => {
-          const el = e.target as HTMLElement
-          if (e.isIntersecting && !el.dataset.done) {
-            el.dataset.done = '1'
-            io.unobserve(el) // play exactly once
-            animate(el)
-          }
-        }),
-      { threshold: 0.4 },
-    )
-    values.forEach((el) => io.observe(el))
+    // Play exactly once per element (`data-done`), and only for the composition
+    // that is actually laid out (`offsetParent` is null for the display:none twin).
+    const fire = (el: HTMLElement) => {
+      if (stopped || el.dataset.done || el.offsetParent === null) return
+      el.dataset.done = '1'
+      animate(el)
+    }
+
+    // Robust trigger: an IntersectionObserver is the primary path, but it can miss
+    // — notably on iOS Safari, and when the section is already in view at mount
+    // (SPA nav from another page). So ALSO check geometry directly on mount and on
+    // every scroll/resize. Whichever notices first wins; `fire`'s `data-done` guard
+    // keeps it single-shot. This guarantees the numbers can never stay stuck at 0.
+    const inView = (el: HTMLElement) => {
+      const r = el.getBoundingClientRect()
+      const vh = window.innerHeight || document.documentElement.clientHeight
+      return r.bottom > 0 && r.top < vh * 0.85
+    }
+    const scan = () => values.forEach((el) => inView(el) && fire(el))
+
+    let io: IntersectionObserver | null = null
+    if ('IntersectionObserver' in window) {
+      io = new IntersectionObserver(
+        (entries) =>
+          entries.forEach((e) => {
+            if (e.isIntersecting) fire(e.target as HTMLElement)
+          }),
+        { threshold: 0.4 },
+      )
+      values.forEach((el) => io!.observe(el))
+    }
+
+    // Initial geometry check (rAF so layout has settled), then a scroll/resize
+    // fallback for everything the observer doesn't catch. Passive = no scroll jank.
+    frames.add(requestAnimationFrame(scan))
+    window.addEventListener('scroll', scan, { passive: true })
+    window.addEventListener('resize', scan, { passive: true })
 
     return () => {
       stopped = true
       frames.forEach((id) => cancelAnimationFrame(id))
-      io.disconnect()
+      io?.disconnect()
+      window.removeEventListener('scroll', scan)
+      window.removeEventListener('resize', scan)
     }
   }, [pathname])
 
