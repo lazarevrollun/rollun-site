@@ -50,7 +50,9 @@
     .catalog-dk p {
       margin: 0;
     }
-    .catalog-dk a {
+    /* Reset link colour to the section text — but NOT the `.btn` links, which must
+       keep their own `.btn-*` colours (else they inherit the dark ink and vanish). */
+    .catalog-dk a:not(.btn) {
       color: inherit;
     }
     .catalog-dk .or-txt {
@@ -514,16 +516,18 @@
       justify-content: center;
       flex-wrap: wrap;
     }
-    /* Sits on light `--color-paper` next to the orange primary. Bare `--color-dark`
-       is nearly the same tone as the ink heading/body text, so it reads as a flat
-       block; a restrained elevation shadow + hairline gives it a clear button identity. */
+    /* Secondary CTA on light `--color-paper`, paired with the orange primary. Dark
+       fill + ORANGE text/border so it reads clearly (bare dark text vanished into the
+       ink copy); on hover it fills orange with dark text — the inverse of the primary. */
     .catalog-dk .cta .btn-dark {
       background: var(--color-dark);
-      border-color: var(--color-dark);
-      box-shadow: 0 12px 26px -14px rgba(0, 0, 0, 0.55);
+      color: var(--color-or);
+      border-color: var(--color-or);
     }
     .catalog-dk .cta .btn-dark:hover {
-      box-shadow: 0 14px 28px -12px rgba(239, 127, 26, 0.5);
+      background: var(--color-or);
+      color: var(--color-dark);
+      border-color: var(--color-or);
     }
   }
 
@@ -597,7 +601,7 @@
     .catalog-mb p {
       margin: 0;
     }
-    .catalog-mb a {
+    .catalog-mb a:not(.btn) {
       color: inherit;
     }
     .catalog-mb .or-txt {
@@ -915,10 +919,15 @@
       width: 100%;
       justify-content: center;
     }
-    /* Same fix as desktop: lift the dark secondary off the light paper so it doesn't
-       read as flat ink text (see `.catalog-dk .cta .btn-dark`). */
+    /* Same treatment as desktop — orange text/border, inverse fill on hover. */
     .catalog-mb .cta .btn-dark {
-      box-shadow: 0 12px 26px -14px rgba(0, 0, 0, 0.55);
+      color: var(--color-or);
+      border-color: var(--color-or);
+    }
+    .catalog-mb .cta .btn-dark:hover {
+      background: var(--color-or);
+      color: var(--color-dark);
+      border-color: var(--color-or);
     }
   }
 
@@ -1135,12 +1144,14 @@
     }
     .catalog-dk .pc-specs .k {
       color: var(--color-ink-mute);
+      flex: none;
     }
     .catalog-dk .pc-specs .v {
       color: var(--color-ink);
       font-weight: 500;
       text-align: right;
-      white-space: nowrap;
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
     .catalog-dk .pc-stock {
       display: inline-flex;
@@ -1785,7 +1796,11 @@
       color: var(--color-ink);
       font-weight: 500;
       text-align: right;
-      white-space: nowrap;
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+    .catalog-mb .pc-specs .k {
+      flex: none;
     }
     .catalog-mb .pc-offers {
       display: flex;
