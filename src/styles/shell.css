@@ -20,14 +20,15 @@
  */
 
 @layer components {
-  /* Global horizontal-scroll guard. Full-bleed mobile scrollers (`.line-shelf`,
-     `.hscroll`, `.product-shelf` — all `margin:0 -20px`) and the off-canvas drawer
-     extend ~20px past the viewport; without this they leak a phantom sideways
-     scroll and a white gutter on the right edge (every page, not just catalog).
-     `clip` (not `hidden`) clips the X axis only, leaving vertical scroll and the
-     fixed header/sticky untouched. */
-  html,
-  body {
+  /* Horizontal-scroll guard. Full-bleed mobile scrollers (`.line-shelf` on home,
+     `.hscroll`/`.product-shelf` on catalog — all `margin:0 -20px`) bleed ~20px past
+     the viewport → a phantom sideways scroll + white gutter on the right edge.
+     Clip it on the mobile SECTION wrappers (x-only). Deliberately NOT on html/body:
+     `overflow-x:clip` on the root scroll container breaks vertical scrolling and
+     any IntersectionObserver that keys off the viewport (e.g. the stats count-up),
+     leaving those counters frozen. Clipping mid-tree sections avoids that entirely. */
+  .home-mb,
+  .catalog-mb {
     overflow-x: clip;
   }
 

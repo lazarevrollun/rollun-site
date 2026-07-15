@@ -779,11 +779,6 @@
     /* ── Line sections (stacked) ── */
     .catalog-mb.line {
       padding: 44px 0 48px;
-      /* The `.hscroll`/`.product-shelf` full-bleed scrollers use `margin:0 -20px`
-         to reach the screen edge; their -20px right bleed spilled 20px past the
-         viewport → a page-wide horizontal scroll. Clip it here (x only, so the
-         scrollers still scroll internally and sticky/y-flow are untouched). */
-      overflow-x: clip;
     }
     .catalog-mb.line.auto {
       background: var(--color-bg);
